@@ -1,0 +1,2474 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CBAM Authorized Declarant Toolkit — Calculate Your EU Carbon Import Obligation</title>
+    <meta
+      name="description"
+      content="Calculate your 2026 CBAM obligation and generate your Authorized Declarant declaration automatically. From €39/month. No consultants. No spreadsheets."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #0a0a0c;
+        --bg-alt: #111114;
+        --surface: #1a1a1e;
+        --surface-2: #222226;
+        --border: rgba(255, 255, 255, 0.06);
+        --border-hover: rgba(255, 255, 255, 0.12);
+        --text: #fafafa;
+        --text-2: #a1a1aa;
+        --text-3: #71717a;
+        --accent: #479fff;
+        --accent-hover: #5aadff;
+        --accent-faint: rgba(71, 159, 255, 0.08);
+        --accent-subtle: rgba(71, 159, 255, 0.14);
+        --green: #22c55e;
+        --green-faint: rgba(34, 197, 94, 0.06);
+        --green-subtle: rgba(34, 197, 94, 0.12);
+        --green-light: #4ade80;
+        --font-display: 'Space Grotesk', sans-serif;
+        --font-body: 'IBM Plex Sans', sans-serif;
+        --radius-sm: 4px;
+        --radius: 8px;
+        --radius-lg: 12px;
+        --radius-xl: 16px;
+        --max-w: 1120px;
+      }
+
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      body {
+        font-family: var(--font-body);
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.6;
+        font-size: 16px;
+      }
+
+      .container {
+        max-width: var(--max-w);
+        margin: 0 auto;
+        padding: 0 24px;
+      }
+
+      /* ─── NOISE TEXTURE OVERLAY ─── */
+      body::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        opacity: 0.015;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+        background-repeat: repeat;
+        background-size: 128px 128px;
+        z-index: 9999;
+      }
+
+      /* ─── NAV ─── */
+      nav {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        background: rgba(10, 10, 12, 0.88);
+        backdrop-filter: blur(16px) saturate(160%);
+        -webkit-backdrop-filter: blur(16px) saturate(160%);
+        border-bottom: 1px solid var(--border);
+      }
+
+      nav .inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        max-width: var(--max-w);
+        margin: 0 auto;
+        padding: 0 24px;
+        width: 100%;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+      }
+
+      .logo-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 6px;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        background: transparent;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+
+      .logo-icon svg {
+        width: 15px;
+        height: 15px;
+        color: #ffffff;
+      }
+
+      .logo-wordmark {
+        font-family: var(--font-display);
+        font-size: 15px;
+        font-weight: 700;
+        color: #ffffff;
+        letter-spacing: -0.2px;
+      }
+
+      .logo-wordmark .dim {
+        opacity: 0.7;
+      }
+
+      .nav-right {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .nav-link {
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--text-2);
+        text-decoration: none;
+        padding: 6px 12px;
+        border-radius: var(--radius-sm);
+        transition: color 150ms;
+        font-family: var(--font-body);
+      }
+
+      .nav-link:hover {
+        color: var(--text);
+      }
+
+      .nav-cta {
+        height: 36px;
+        padding: 0 16px;
+        background: var(--accent);
+        color: #fff;
+        border: none;
+        border-radius: var(--radius-sm);
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        transition: background 150ms, transform 100ms;
+        font-family: var(--font-body);
+        letter-spacing: 0.01em;
+      }
+
+      .nav-cta:hover {
+        background: var(--accent-hover);
+      }
+
+      .nav-cta:active {
+        transform: scale(0.98);
+      }
+
+      /* ─── HERO ─── */
+      .hero {
+        padding: 104px 0 96px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image: linear-gradient(rgba(255, 255, 255, 0.022) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.022) 1px, transparent 1px);
+        background-size: 48px 48px;
+        mask-image: radial-gradient(ellipse 80% 80% at 50% 0%, black 30%, transparent 100%);
+        -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 0%, black 30%, transparent 100%);
+        pointer-events: none;
+      }
+
+      .hero-inner {
+        position: relative;
+        z-index: 1;
+      }
+
+      .hero-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 28px;
+        padding: 5px 12px 5px 10px;
+        border: 1px solid var(--border-hover);
+        border-radius: 100px;
+        background: var(--surface);
+      }
+
+      .eyebrow-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--green);
+        flex-shrink: 0;
+      }
+
+      .eyebrow-text {
+        font-size: 12px;
+        font-weight: 500;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--text-2);
+        font-family: var(--font-body);
+      }
+
+      .hero h1 {
+        font-family: var(--font-display);
+        font-size: clamp(2.4rem, 5vw, 3.5rem);
+        font-weight: 700;
+        line-height: 1.1;
+        letter-spacing: -0.03em;
+        max-width: 680px;
+        margin-bottom: 24px;
+        color: var(--text);
+      }
+
+      .hero p.lead {
+        font-size: 1.05rem;
+        line-height: 1.72;
+        color: var(--text-2);
+        max-width: 520px;
+        margin-bottom: 40px;
+        font-weight: 400;
+      }
+
+      .hero-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .btn-primary {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        height: 48px;
+        padding: 0 24px;
+        background: var(--accent);
+        color: #fff;
+        border: none;
+        border-radius: var(--radius-sm);
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        transition: background 150ms, transform 100ms;
+        font-family: var(--font-body);
+        letter-spacing: 0.01em;
+      }
+
+      .btn-primary:hover {
+        background: var(--accent-hover);
+        transform: translateY(-1px);
+      }
+
+      .btn-primary:active {
+        transform: translateY(0);
+      }
+
+      .btn-ghost {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        height: 48px;
+        padding: 0 20px;
+        background: transparent;
+        color: var(--text-2);
+        border: 1px solid var(--border-hover);
+        border-radius: var(--radius-sm);
+        font-size: 15px;
+        font-weight: 500;
+        cursor: pointer;
+        text-decoration: none;
+        transition: border-color 150ms, color 150ms, background 150ms;
+        font-family: var(--font-body);
+      }
+
+      .btn-ghost:hover {
+        border-color: rgba(255, 255, 255, 0.2);
+        color: var(--text);
+        background: var(--surface);
+      }
+
+      .hero-stats {
+        display: grid;
+        grid-template-columns: repeat(3, auto);
+        justify-content: flex-start;
+        gap: 0;
+        margin-top: 72px;
+        padding-top: 40px;
+        border-top: 1px solid var(--border);
+      }
+
+      .stat {
+        padding: 0 40px 0 0;
+        border-right: 1px solid var(--border);
+        margin-right: 40px;
+      }
+
+      .stat:last-child {
+        border-right: none;
+        padding-right: 0;
+        margin-right: 0;
+      }
+
+      .stat-value {
+        font-family: var(--font-display);
+        font-size: 1.7rem;
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        color: var(--text);
+        margin-bottom: 4px;
+      }
+
+      .stat-label {
+        font-size: 13px;
+        color: var(--text-3);
+        font-weight: 400;
+      }
+
+      /* ─── SECTION BASE ─── */
+      section {
+        padding: 96px 0;
+      }
+
+      .section-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 20px;
+        font-size: 13px;
+        font-weight: 500;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--text-3);
+        font-family: var(--font-body);
+      }
+
+      h2.section-h2 {
+        font-family: var(--font-display);
+        font-size: clamp(1.8rem, 3vw, 2.5rem);
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        line-height: 1.15;
+        margin-bottom: 16px;
+        color: var(--text);
+      }
+
+      p.section-desc {
+        font-size: 1rem;
+        color: var(--text-2);
+        line-height: 1.75;
+        max-width: 520px;
+        font-weight: 400;
+      }
+
+      /* ─── OBLIGATION SECTION ─── */
+      .obligation {
+        background: var(--bg-alt);
+      }
+
+      .obligation-layout {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 64px;
+        align-items: start;
+        margin-top: 56px;
+      }
+
+      .obligation-text p {
+        font-size: 1rem;
+        color: var(--text-2);
+        line-height: 1.8;
+        margin-bottom: 20px;
+      }
+
+      .steps-stack {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+
+      .step-row {
+        display: flex;
+        gap: 20px;
+        align-items: flex-start;
+        padding: 20px;
+        border-radius: var(--radius);
+        border: 1px solid transparent;
+        transition: background 150ms, border-color 150ms;
+      }
+
+      .step-row:hover {
+        background: var(--surface);
+        border-color: var(--border);
+      }
+
+      .step-index {
+        flex-shrink: 0;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: var(--accent-faint);
+        border: 1px solid var(--accent-subtle);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--accent);
+        margin-top: 2px;
+        font-family: var(--font-display);
+      }
+
+      .step-body h4 {
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--text);
+        margin-bottom: 6px;
+        font-family: var(--font-display);
+      }
+
+      .step-body p {
+        font-size: 13px;
+        color: var(--text-2);
+        line-height: 1.6;
+      }
+
+      .gap-card {
+        margin-top: 8px;
+        padding: 18px 20px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background: var(--surface);
+      }
+
+      .gap-card p {
+        font-size: 14px;
+        color: var(--text-2);
+        line-height: 1.7;
+      }
+
+      .gap-card strong {
+        color: var(--text);
+        font-weight: 600;
+      }
+
+      .scope-box {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: 28px;
+        transition: border-color 200ms, transform 200ms;
+      }
+
+      .scope-box:hover {
+        border-color: var(--border-hover);
+        transform: translateY(-2px);
+      }
+
+      .scope-box-title {
+        font-size: 13px;
+        font-weight: 500;
+        letter-spacing: 0.04em;
+        color: var(--text-3);
+        text-transform: uppercase;
+        margin-bottom: 20px;
+        font-family: var(--font-body);
+      }
+
+      .scope-list {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .scope-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 12px;
+        background: var(--surface-2);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        font-size: 14px;
+        font-weight: 400;
+        color: var(--text-2);
+        transition: border-color 150ms;
+      }
+
+      .scope-item:hover {
+        border-color: var(--border-hover);
+        color: var(--text);
+      }
+
+      .scope-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--green);
+        flex-shrink: 0;
+      }
+
+      .threshold-note {
+        margin-top: 16px;
+        padding: 14px 16px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid var(--border-hover);
+        border-radius: var(--radius-sm);
+        font-size: 13px;
+        color: var(--text-2);
+        line-height: 1.6;
+      }
+
+      .threshold-note strong {
+        color: var(--text);
+        font-weight: 600;
+      }
+
+      /* ─── CALCULATOR SECTION ─── */
+      .calc-section {
+        background: var(--bg);
+      }
+
+      .calc-section-head {
+        text-align: center;
+        margin-bottom: 52px;
+      }
+
+      .calc-section-head .section-desc {
+        margin: 0 auto;
+      }
+
+      .calc-card {
+        max-width: 740px;
+        margin: 0 auto;
+        background: var(--surface);
+        border: 1px solid var(--border-hover);
+        border-radius: var(--radius-xl);
+        overflow: hidden;
+        box-shadow: 0 24px 80px rgba(0, 0, 0, 0.4);
+      }
+
+      .calc-top {
+        padding: 24px 32px;
+        border-bottom: 1px solid var(--border);
+        background: var(--surface-2);
+      }
+
+      .calc-top-inner {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .calc-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: var(--radius);
+        background: var(--accent-faint);
+        border: 1px solid var(--accent-subtle);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+
+      .calc-icon svg {
+        width: 18px;
+        height: 18px;
+        color: var(--accent);
+      }
+
+      .calc-top-text h3 {
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--text);
+        font-family: var(--font-display);
+      }
+
+      .calc-top-text p {
+        font-size: 13px;
+        color: var(--text-3);
+        margin-top: 2px;
+      }
+
+      .calc-body {
+        padding: 28px 32px;
+      }
+
+      .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+
+      .form-col {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .form-col.span-full {
+        grid-column: 1 / -1;
+      }
+
+      .form-col label {
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--text-3);
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        font-family: var(--font-body);
+      }
+
+      .form-col label .opt {
+        font-weight: 400;
+        color: var(--text-3);
+        text-transform: none;
+        letter-spacing: 0;
+        opacity: 0.7;
+      }
+
+      .form-control {
+        background: var(--bg);
+        border: 1px solid var(--border-hover);
+        color: var(--text);
+        border-radius: var(--radius-sm);
+        padding: 11px 14px;
+        font-size: 14px;
+        font-weight: 400;
+        width: 100%;
+        outline: none;
+        font-family: var(--font-body);
+        transition: border-color 150ms, box-shadow 150ms;
+        -webkit-appearance: none;
+      }
+
+      .form-control:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px var(--accent-faint);
+      }
+
+      .form-control option {
+        background: #222226;
+      }
+
+      .calc-action {
+        margin-top: 20px;
+        width: 100%;
+        height: 48px;
+        background: var(--accent);
+        color: #fff;
+        border: none;
+        border-radius: var(--radius-sm);
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: var(--font-body);
+        transition: background 150ms, transform 100ms;
+        letter-spacing: 0.01em;
+      }
+
+      .calc-action:hover {
+        background: var(--accent-hover);
+        transform: translateY(-1px);
+      }
+
+      .calc-action:active {
+        transform: none;
+      }
+
+      /* Results */
+      .calc-results {
+        display: none;
+        padding: 24px 32px 28px;
+        border-top: 1px solid var(--border);
+      }
+
+      .calc-results.visible {
+        display: block;
+      }
+
+      .results-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+
+      .results-check {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: var(--green-faint);
+        border: 1px solid var(--green-subtle);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+
+      .results-check svg {
+        width: 14px;
+        height: 14px;
+        color: var(--green-light);
+      }
+
+      .results-header h4 {
+        font-size: 15px;
+        font-weight: 600;
+        font-family: var(--font-display);
+      }
+
+      .results-row {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        margin-bottom: 20px;
+      }
+
+      .result-tile {
+        background: var(--surface-2);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 16px;
+        text-align: center;
+        transition: border-color 200ms, transform 200ms;
+      }
+
+      .result-tile:hover {
+        border-color: var(--border-hover);
+        transform: translateY(-2px);
+      }
+
+      .result-num {
+        font-family: var(--font-display);
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--accent);
+        letter-spacing: -0.02em;
+        margin-bottom: 4px;
+      }
+
+      .result-lbl {
+        font-size: 11px;
+        color: var(--text-3);
+        line-height: 1.4;
+        font-weight: 400;
+      }
+
+      .disclaimer-box {
+        margin-bottom: 20px;
+        padding: 12px 14px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid var(--border-hover);
+        border-radius: var(--radius-sm);
+        font-size: 12px;
+        color: var(--text-3);
+        line-height: 1.6;
+      }
+
+      .disclaimer-box strong {
+        color: var(--text-2);
+        font-weight: 600;
+      }
+
+      .email-gate {
+        background: var(--surface-2);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 20px;
+      }
+
+      .email-gate h4 {
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 6px;
+        font-family: var(--font-display);
+      }
+
+      .email-gate p {
+        font-size: 13px;
+        color: var(--text-2);
+        margin-bottom: 14px;
+      }
+
+      .email-row {
+        display: flex;
+        gap: 8px;
+      }
+
+      .email-row input {
+        flex: 1;
+        background: var(--bg);
+        border: 1px solid var(--border-hover);
+        color: var(--text);
+        border-radius: var(--radius-sm);
+        padding: 10px 14px;
+        font-size: 14px;
+        font-family: var(--font-body);
+        outline: none;
+        transition: border-color 150ms, box-shadow 150ms;
+      }
+
+      .email-row input:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px var(--accent-faint);
+      }
+
+      .email-row button {
+        padding: 10px 18px;
+        background: var(--accent);
+        color: #fff;
+        border: none;
+        border-radius: var(--radius-sm);
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        white-space: nowrap;
+        font-family: var(--font-body);
+        transition: background 150ms;
+      }
+
+      .email-row button:hover {
+        background: var(--accent-hover);
+      }
+
+      .email-sent {
+        display: none;
+        background: var(--green-faint);
+        border: 1px solid var(--green-subtle);
+        border-radius: var(--radius-sm);
+        padding: 14px;
+        text-align: center;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--green-light);
+      }
+
+      .email-sent.visible {
+        display: block;
+      }
+
+      /* ─── PRODUCT SECTION ─── */
+      .product-section {
+        background: var(--bg-alt);
+      }
+
+      .product-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1px;
+        margin-top: 56px;
+        background: var(--border);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-xl);
+        overflow: hidden;
+      }
+
+      .product-tile {
+        background: var(--surface);
+        padding: 32px;
+        transition: background 200ms, transform 200ms;
+      }
+
+      .product-tile:hover {
+        background: var(--surface-2);
+        transform: translateY(-2px);
+      }
+
+      .product-tile-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: var(--radius);
+        background: var(--accent-faint);
+        border: 1px solid var(--accent-subtle);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+      }
+
+      .product-tile-icon svg {
+        width: 20px;
+        height: 20px;
+        color: var(--accent);
+      }
+
+      .product-tile h3 {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 10px;
+        font-family: var(--font-display);
+        color: var(--text);
+      }
+
+      .product-tile p {
+        font-size: 14px;
+        color: var(--text-2);
+        line-height: 1.7;
+        margin-bottom: 20px;
+      }
+
+      .product-tag {
+        display: inline-block;
+        padding: 3px 10px;
+        background: var(--accent-faint);
+        border: 1px solid var(--accent-subtle);
+        border-radius: 100px;
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--accent);
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      /* ─── PRICING SECTION ─── */
+      .pricing-section {
+        background: var(--bg);
+      }
+
+      .pricing-section-head {
+        text-align: center;
+      }
+
+      .pricing-section-head .section-desc {
+        margin: 0 auto;
+      }
+
+      .pricing-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+        margin-top: 56px;
+        align-items: start;
+      }
+
+      .price-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-xl);
+        padding: 28px;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        transition: border-color 200ms, transform 200ms, box-shadow 200ms;
+      }
+
+      .price-card:hover {
+        border-color: var(--border-hover);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      }
+
+      .price-card.featured {
+        background: var(--surface-2);
+        border-color: var(--accent);
+      }
+
+      .price-card.featured:hover {
+        border-color: var(--accent-hover);
+      }
+
+      .price-card.dimmed {
+        opacity: 0.75;
+      }
+
+      .featured-pill {
+        position: absolute;
+        top: -13px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--accent);
+        color: #fff;
+        border-radius: 100px;
+        padding: 4px 14px;
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        white-space: nowrap;
+        font-family: var(--font-body);
+      }
+
+      .tier-label {
+        font-size: 13px;
+        font-weight: 500;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--text-3);
+        margin-bottom: 12px;
+        font-family: var(--font-body);
+      }
+
+      .price-amount {
+        font-family: var(--font-display);
+        font-size: 2.6rem;
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        line-height: 1;
+        margin-bottom: 4px;
+        color: var(--text);
+      }
+
+      .price-amount sup {
+        font-size: 1.2rem;
+        font-weight: 600;
+        vertical-align: super;
+        letter-spacing: 0;
+      }
+
+      .price-amount .period {
+        font-size: 1rem;
+        font-weight: 400;
+        color: var(--text-3);
+        letter-spacing: 0;
+      }
+
+      .price-note {
+        font-size: 13px;
+        color: var(--text-3);
+        margin-bottom: 24px;
+      }
+
+      .price-divider {
+        height: 1px;
+        background: var(--border);
+        margin-bottom: 24px;
+      }
+
+      .feature-list {
+        list-style: none;
+        flex: 1;
+        margin-bottom: 28px;
+      }
+
+      .feature-list li {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 8px 0;
+        font-size: 14px;
+        color: var(--text-2);
+      }
+
+      .feature-list li + li {
+        border-top: 1px solid var(--border);
+      }
+
+      .check-icon {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: var(--green-faint);
+        border: 1px solid var(--green-subtle);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        margin-top: 1px;
+      }
+
+      .check-icon svg {
+        width: 9px;
+        height: 9px;
+        color: var(--green-light);
+      }
+
+      .dash-icon {
+        color: var(--text-3);
+        flex-shrink: 0;
+        margin-top: 2px;
+        font-size: 16px;
+        line-height: 1;
+      }
+
+      .feature-list li.dimmed {
+        color: var(--text-3);
+      }
+
+      .coming-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-bottom: 12px;
+        padding: 4px 10px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid var(--border-hover);
+        border-radius: var(--radius-sm);
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--text-3);
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        font-family: var(--font-body);
+      }
+
+      .cta-primary {
+        display: block;
+        text-align: center;
+        text-decoration: none;
+        height: 44px;
+        line-height: 44px;
+        padding: 0 16px;
+        background: var(--accent);
+        color: #fff;
+        border: none;
+        border-radius: var(--radius-sm);
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: var(--font-body);
+        transition: background 150ms, transform 100ms;
+        letter-spacing: 0.01em;
+      }
+
+      .cta-primary:hover {
+        background: var(--accent-hover);
+        transform: translateY(-1px);
+      }
+
+      .cta-outline {
+        display: block;
+        text-align: center;
+        text-decoration: none;
+        height: 44px;
+        line-height: 42px;
+        padding: 0 16px;
+        background: transparent;
+        color: var(--text-2);
+        border: 1px solid var(--border-hover);
+        border-radius: var(--radius-sm);
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: var(--font-body);
+        transition: border-color 150ms, color 150ms, background 150ms;
+      }
+
+      .cta-outline:hover {
+        border-color: rgba(255, 255, 255, 0.2);
+        color: var(--text);
+        background: var(--surface-2);
+      }
+
+      .cta-waitlist {
+        display: block;
+        text-align: center;
+        text-decoration: none;
+        height: 44px;
+        line-height: 42px;
+        padding: 0 16px;
+        background: transparent;
+        color: var(--text-3);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        font-family: var(--font-body);
+        transition: border-color 150ms, color 150ms;
+        width: 100%;
+      }
+
+      .cta-waitlist:hover {
+        border-color: var(--border-hover);
+        color: var(--text-2);
+      }
+
+      .pricing-footnote {
+        text-align: center;
+        margin-top: 32px;
+        font-size: 13px;
+        color: var(--text-3);
+        line-height: 1.6;
+      }
+
+      /* ─── FAQ SECTION ─── */
+      .faq-section {
+        background: var(--bg-alt);
+      }
+
+      .faq-section-head {
+        margin-bottom: 48px;
+      }
+
+      .faq-list {
+        max-width: 720px;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+
+      .faq-item {
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background: var(--surface);
+        overflow: hidden;
+        transition: border-color 150ms;
+      }
+
+      .faq-item:hover {
+        border-color: var(--border-hover);
+      }
+
+      .faq-item.open {
+        border-color: var(--border-hover);
+      }
+
+      .faq-trigger {
+        width: 100%;
+        text-align: left;
+        background: none;
+        border: none;
+        padding: 20px 24px;
+        font-size: 15px;
+        font-weight: 500;
+        color: var(--text);
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        font-family: var(--font-body);
+        transition: color 150ms;
+      }
+
+      .faq-trigger:hover {
+        color: var(--text);
+      }
+
+      .faq-chevron {
+        flex-shrink: 0;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 1px solid var(--border-hover);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        color: var(--text-3);
+        transition: transform 200ms, background 200ms, border-color 200ms;
+        font-style: normal;
+      }
+
+      .faq-item.open .faq-chevron {
+        transform: rotate(45deg);
+        background: var(--accent-faint);
+        border-color: var(--accent-subtle);
+        color: var(--accent);
+      }
+
+      .faq-body {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 250ms ease;
+      }
+
+      .faq-body-inner {
+        padding: 0 24px 20px;
+        font-size: 14px;
+        color: var(--text-2);
+        line-height: 1.75;
+      }
+
+      /* ─── CTA BAND ─── */
+      .cta-band {
+        background: var(--surface);
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+        padding: 80px 0;
+      }
+
+      .cta-band-inner {
+        text-align: center;
+      }
+
+      .cta-band h2 {
+        font-family: var(--font-display);
+        font-size: clamp(1.8rem, 3vw, 2.4rem);
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        margin-bottom: 16px;
+        color: var(--text);
+      }
+
+      .cta-band p {
+        font-size: 1rem;
+        color: var(--text-2);
+        margin-bottom: 32px;
+        max-width: 440px;
+        margin-left: auto;
+        margin-right: auto;
+        line-height: 1.7;
+      }
+
+      /* ─── FOOTER ─── */
+      footer {
+        background: var(--bg);
+        border-top: 1px solid var(--border);
+        padding: 48px 0;
+      }
+
+      footer .inner {
+        max-width: var(--max-w);
+        margin: 0 auto;
+        padding: 0 24px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        align-items: start;
+      }
+
+      .footer-logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 16px;
+        text-decoration: none;
+      }
+
+      .footer-logo .logo-icon {
+        width: 28px;
+        height: 28px;
+        border-radius: 5px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: transparent;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .footer-logo .logo-icon svg {
+        width: 13px;
+        height: 13px;
+        color: #ffffff;
+      }
+
+      .footer-logo .logo-wordmark {
+        font-family: var(--font-display);
+        font-size: 14px;
+        font-weight: 700;
+        color: #ffffff;
+      }
+
+      .footer-logo .logo-wordmark .dim {
+        opacity: 0.7;
+      }
+
+      .footer-desc {
+        font-size: 13px;
+        color: var(--text-3);
+        line-height: 1.7;
+        max-width: 380px;
+      }
+
+      .footer-links-col h4 {
+        font-size: 13px;
+        font-weight: 500;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--text-3);
+        margin-bottom: 16px;
+        font-family: var(--font-body);
+      }
+
+      .footer-links {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .footer-links a {
+        font-size: 14px;
+        color: var(--text-2);
+        text-decoration: none;
+        transition: color 150ms;
+        font-weight: 400;
+      }
+
+      .footer-links a:hover {
+        color: var(--text);
+      }
+
+      .footer-bottom {
+        max-width: var(--max-w);
+        margin: 32px auto 0;
+        padding: 24px 24px 0;
+        border-top: 1px solid var(--border);
+        font-size: 12px;
+        color: var(--text-3);
+        line-height: 1.6;
+      }
+
+      /* ─── MODAL ─── */
+      .modal-backdrop {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 200;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+      }
+
+      .modal-backdrop.open {
+        display: flex;
+      }
+
+      .modal {
+        background: var(--surface);
+        border: 1px solid var(--border-hover);
+        border-radius: var(--radius-xl);
+        padding: 32px;
+        max-width: 480px;
+        width: 100%;
+        position: relative;
+        box-shadow: 0 32px 80px rgba(0, 0, 0, 0.5);
+      }
+
+      .modal-close {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        border: 1px solid var(--border);
+        background: none;
+        color: var(--text-3);
+        font-size: 18px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: border-color 150ms, color 150ms;
+      }
+
+      .modal-close:hover {
+        border-color: var(--border-hover);
+        color: var(--text);
+      }
+
+      .modal h3 {
+        font-family: var(--font-display);
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--text);
+        margin-bottom: 8px;
+      }
+
+      .modal > p {
+        font-size: 14px;
+        color: var(--text-2);
+        line-height: 1.7;
+        margin-bottom: 24px;
+      }
+
+      .modal-field {
+        margin-bottom: 16px;
+      }
+
+      .modal-label {
+        display: block;
+        font-size: 13px;
+        font-weight: 500;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--text-3);
+        margin-bottom: 6px;
+        font-family: var(--font-body);
+      }
+
+      .modal-input {
+        width: 100%;
+        background: var(--bg);
+        border: 1px solid var(--border-hover);
+        color: var(--text);
+        border-radius: var(--radius-sm);
+        padding: 11px 14px;
+        font-size: 14px;
+        font-family: var(--font-body);
+        outline: none;
+        transition: border-color 150ms, box-shadow 150ms;
+        -webkit-appearance: none;
+      }
+
+      .modal-input:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px var(--accent-faint);
+      }
+
+      .modal-input option {
+        background: #222226;
+      }
+
+      .modal-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+      }
+
+      .modal-success {
+        display: none;
+        margin-top: 16px;
+        padding: 14px;
+        background: var(--green-faint);
+        border: 1px solid var(--green-subtle);
+        border-radius: var(--radius-sm);
+        text-align: center;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--green-light);
+      }
+
+      .modal-success.visible {
+        display: block;
+      }
+
+      /* ─── RESPONSIVE ─── */
+      @media (max-width: 768px) {
+        .hero {
+          padding: 72px 0 64px;
+        }
+
+        .hero-stats {
+          grid-template-columns: repeat(3, 1fr);
+          gap: 24px;
+        }
+
+        .stat {
+          padding: 0;
+          border-right: none;
+          margin-right: 0;
+          border-bottom: 1px solid var(--border);
+          padding-bottom: 16px;
+        }
+
+        .stat:last-child {
+          border-bottom: none;
+          padding-bottom: 0;
+        }
+
+        .obligation-layout {
+          grid-template-columns: 1fr;
+          gap: 40px;
+        }
+
+        .product-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .pricing-grid {
+          grid-template-columns: 1fr;
+          max-width: 400px;
+          margin-left: auto;
+          margin-right: auto;
+        }
+
+        .form-row {
+          grid-template-columns: 1fr;
+        }
+
+        footer .inner {
+          grid-template-columns: 1fr;
+          gap: 32px;
+        }
+
+        .nav-right .nav-link {
+          display: none;
+        }
+      }
+
+      @media (max-width: 375px) {
+        .hero h1 {
+          font-size: 2rem;
+        }
+
+        .hero-stats {
+          grid-template-columns: 1fr;
+        }
+
+        .stat {
+          border-right: none;
+        }
+      }
+    </style>
+
+    <!-- ─── GA4 ANALYTICS ─── -->
+    <!-- Replace G-XXXXXXXXXX with your GA4 Measurement ID from the Founder -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', 'G-XXXXXXXXXX', { send_page_view: true });
+    </script>
+
+    <!-- ─── LINKEDIN INSIGHT TAG ─── -->
+    <!-- Replace XXXXXXX with your LinkedIn Partner ID from the Founder -->
+    <script type="text/javascript">
+      _linkedin_partner_id = "XXXXXXX";
+      window._linkedin_data_partner_ids = window._linkedin_data_partner_ids || [];
+      window._linkedin_data_partner_ids.push(_linkedin_partner_id);
+    </script>
+    <script type="text/javascript">
+      (function(l) {
+        if (!l){window.lintrk = function(a,b){window.lintrk.q.push([a,b])};
+        window.lintrk.q=[]}
+        var s = document.getElementsByTagName("script")[0];
+        var b = document.createElement("script");
+        b.type = "text/javascript";b.async = true;
+        b.src = "https://snap.licdn.com/li.lms-analytics/insight.min.js";
+        s.parentNode.insertBefore(b, s);})(window.lintrk);
+    </script>
+    <noscript>
+      <img height="1" width="1" style="display:none;" alt=""
+        src="https://px.ads.linkedin.com/collect/?pid=XXXXXXX&fmt=gif" />
+    </noscript>
+
+  </head>
+  <body>
+    <!-- ─── NAV ─── -->
+    <nav>
+      <div class="inner">
+        <a href="#" class="logo">
+          <div class="logo-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7" rx="1" />
+              <rect x="14" y="3" width="7" height="7" rx="1" />
+              <rect x="3" y="14" width="7" height="7" rx="1" />
+              <path d="M17 17h.01M14 14h7v7h-7z" />
+            </svg>
+          </div>
+          <span class="logo-wordmark">CBAM<span class="dim">Toolkit</span></span>
+        </a>
+        <div class="nav-right">
+          <a href="#product" class="nav-link">Product</a>
+          <a href="#pricing" class="nav-link">Pricing</a>
+          <a href="#faq" class="nav-link">FAQ</a>
+          <a href="#calculator" class="nav-cta">Calculate free</a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ─── HERO ─── -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero-inner">
+          <div class="hero-eyebrow">
+            <div class="eyebrow-dot"></div>
+            <span class="eyebrow-text">Active January 2026</span>
+          </div>
+          <h1>CBAM Compliance, Simplified.</h1>
+          <p class="lead">
+            EU importers above 50 tonnes/year of CBAM-covered goods must register as Authorized
+            Declarants and file annual declarations. CBAM Toolkit automates your calculations
+            and generates your declaration in Annex IV format. No Excel. No consultants.
+          </p>
+          <div class="hero-actions">
+            <a href="#calculator" class="btn-primary">Calculate my CBAM cost — Free</a>
+            <a href="#pricing" class="btn-ghost">See pricing</a>
+          </div>
+          <div class="hero-stats">
+            <div class="stat">
+              <div class="stat-value">50t</div>
+              <div class="stat-label">Annual import threshold</div>
+            </div>
+            <div class="stat">
+              <div class="stat-value">Sep 2027</div>
+              <div class="stat-label">First declaration deadline</div>
+            </div>
+            <div class="stat">
+              <div class="stat-value">Full pack</div>
+              <div class="stat-label">Calculation + Declaration + Tracker</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── OBLIGATION SECTION ─── -->
+    <section class="obligation" id="problem">
+      <div class="container">
+        <div class="section-eyebrow">The Obligation</div>
+        <h2 class="section-h2">CBAM is live. Are you<br />above 50 tonnes?</h2>
+        <p class="section-desc">
+          From January 2026, EU importers above 50 tonnes/year of CBAM-covered goods must register as
+          Authorized Declarants and comply with three mandatory tasks.
+        </p>
+        <div class="obligation-layout">
+          <div>
+            <div class="steps-stack">
+              <div class="step-row">
+                <div class="step-index">1</div>
+                <div class="step-body">
+                  <h4>Register as Authorized CBAM Declarant</h4>
+                  <p>Registration is mandatory. Without it, you cannot file your declaration and face potential customs suspension.</p>
+                </div>
+              </div>
+              <div class="step-row">
+                <div class="step-index">2</div>
+                <div class="step-body">
+                  <h4>Calculate embedded carbon per shipment</h4>
+                  <p>Using EU Commission methodology (Implementing Regulation 2023/1603). Manual spreadsheets are complex and error-prone.</p>
+                </div>
+              </div>
+              <div class="step-row">
+                <div class="step-index">3</div>
+                <div class="step-body">
+                  <h4>File annual CBAM declaration by Sep 30, 2027</h4>
+                  <p>Submit to the EU CBAM Registry in Annex IV format. Incorrect declarations carry financial penalties.</p>
+                </div>
+              </div>
+            </div>
+            <div class="gap-card">
+              <p>
+                <strong>Current options:</strong> DIY with EU Commission Excel (complex, no guided UI) — or
+                enterprise tools starting at €10,000+/year. Nothing in between. Until now.
+              </p>
+            </div>
+          </div>
+          <div>
+            <div class="scope-box">
+              <div class="scope-box-title">Goods in scope</div>
+              <div class="scope-list">
+                <div class="scope-item"><span class="scope-dot"></span>Steel &amp; Iron products</div>
+                <div class="scope-item"><span class="scope-dot"></span>Cement</div>
+                <div class="scope-item"><span class="scope-dot"></span>Aluminum</div>
+                <div class="scope-item"><span class="scope-dot"></span>Fertilizers</div>
+                <div class="scope-item"><span class="scope-dot"></span>Hydrogen</div>
+                <div class="scope-item"><span class="scope-dot"></span>Electricity</div>
+              </div>
+              <div class="threshold-note">
+                Imports above <strong>50 tonnes per year</strong> from non-EU countries are in scope.
+                Micro-importers below this threshold are exempt.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── CALCULATOR SECTION ─── -->
+    <section class="calc-section" id="calculator">
+      <div class="container">
+        <div class="calc-section-head">
+          <div class="section-eyebrow">Free Tool</div>
+          <h2 class="section-h2">Estimate your 2026 CBAM<br />obligation in 2 minutes</h2>
+          <p class="section-desc">
+            Enter your import data and get an instant estimate of your annual CBAM obligation.
+            No account required.
+          </p>
+        </div>
+        <div class="calc-card">
+          <div class="calc-top">
+            <div class="calc-top-inner">
+              <div class="calc-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="4" y="2" width="16" height="20" rx="2" />
+                  <line x1="8" y1="6" x2="16" y2="6" />
+                  <line x1="8" y1="10" x2="16" y2="10" />
+                  <line x1="8" y1="14" x2="12" y2="14" />
+                </svg>
+              </div>
+              <div class="calc-top-text">
+                <h3>Free CBAM Cost Estimator</h3>
+                <p>Based on EU Commission methodology — Implementing Regulation 2023/1603</p>
+              </div>
+            </div>
+          </div>
+          <div class="calc-body">
+            <form id="calcForm" onsubmit="runCalculation(event)">
+              <div class="form-row">
+                <div class="form-col">
+                  <label for="productCategory">Product category</label>
+                  <select id="productCategory" class="form-control" required>
+                    <option value="">Select category...</option>
+                    <option value="steel">Steel &amp; Iron products</option>
+                    <option value="cement">Cement</option>
+                    <option value="aluminum">Aluminum</option>
+                    <option value="fertilizers">Fertilizers</option>
+                    <option value="hydrogen">Hydrogen</option>
+                    <option value="electricity">Electricity</option>
+                  </select>
+                </div>
+                <div class="form-col">
+                  <label for="importVolume">Annual import volume (tonnes)</label>
+                  <input
+                    type="number"
+                    id="importVolume"
+                    class="form-control"
+                    min="1"
+                    placeholder="e.g. 150"
+                    required
+                  />
+                </div>
+                <div class="form-col">
+                  <label for="countryOrigin">Country of origin</label>
+                  <select id="countryOrigin" class="form-control" required>
+                    <option value="">Select country...</option>
+                    <option value="CN">China</option>
+                    <option value="IN">India</option>
+                    <option value="TR">Turkey</option>
+                    <option value="UA">Ukraine</option>
+                    <option value="RU">Russia</option>
+                    <option value="UK">United Kingdom</option>
+                    <option value="US">United States</option>
+                    <option value="JP">Japan</option>
+                    <option value="KR">South Korea</option>
+                    <option value="EG">Egypt</option>
+                    <option value="MA">Morocco</option>
+                    <option value="MX">Mexico</option>
+                    <option value="BR">Brazil</option>
+                    <option value="ZA">South Africa</option>
+                    <option value="TW">Taiwan</option>
+                    <option value="VN">Vietnam</option>
+                    <option value="TH">Thailand</option>
+                    <option value="ID">Indonesia</option>
+                    <option value="PK">Pakistan</option>
+                    <option value="BD">Bangladesh</option>
+                    <option value="OTHER">Other non-EU country</option>
+                  </select>
+                </div>
+                <div class="form-col">
+                  <label for="carbonPricePaid">
+                    Carbon price paid in origin
+                    <span class="opt">(optional, EUR/tCO2)</span>
+                  </label>
+                  <input
+                    type="number"
+                    id="carbonPricePaid"
+                    class="form-control"
+                    min="0"
+                    step="0.01"
+                    placeholder="0.00 (defaults to 0)"
+                  />
+                </div>
+              </div>
+              <button type="submit" class="calc-action" id="calcBtn">
+                Calculate my CBAM obligation
+              </button>
+            </form>
+          </div>
+          <div class="calc-results" id="calcResults">
+            <div class="results-header">
+              <div class="results-check">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+              </div>
+              <h4>Your estimated CBAM obligation</h4>
+            </div>
+            <div class="results-row">
+              <div class="result-tile">
+                <div class="result-num" id="resObligation">—</div>
+                <div class="result-lbl">Estimated annual<br />CBAM obligation</div>
+              </div>
+              <div class="result-tile">
+                <div class="result-num" id="resCerts">—</div>
+                <div class="result-lbl">CBAM certificates<br />required (tCO2)</div>
+              </div>
+              <div class="result-tile">
+                <div class="result-num" id="resEtsPrice">—</div>
+                <div class="result-lbl">EU ETS carbon price<br />used (EUR/tCO2)</div>
+              </div>
+            </div>
+            <div class="disclaimer-box">
+              <strong>Important disclaimer:</strong> This is an automated estimate for planning purposes
+              only. Actual CBAM obligations depend on verified emission data from your suppliers and
+              official EU Commission calculation methodology. Verify with your customs advisor before
+              official submission. This tool is not liable for regulatory penalties arising from
+              incorrect declarations.
+            </div>
+            <div class="email-gate" id="emailGate">
+              <h4>Get your full calculation report in your inbox</h4>
+              <p>
+                We'll send you a detailed PDF with your CBAM obligation breakdown, declaration
+                template, and a step-by-step compliance checklist.
+              </p>
+              <div class="email-row">
+                <input type="email" id="reportEmail" placeholder="your@company.com" />
+                <button type="button" onclick="submitEmail()">Send me the full report</button>
+              </div>
+              <div class="email-sent" id="emailSuccess">
+                Report sent. Check your inbox — it will arrive within 2 minutes.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── PRODUCT SECTION ─── -->
+    <section class="product-section" id="product">
+      <div class="container">
+        <div class="section-eyebrow">The Product</div>
+        <h2 class="section-h2">Everything you need<br />to comply with CBAM</h2>
+        <p class="section-desc">Three tools, one subscription. No consultants required.</p>
+        <div class="product-grid">
+          <div class="product-tile">
+            <div class="product-tile-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+              </svg>
+            </div>
+            <h3>CBAM Calculation</h3>
+            <p>
+              Enter your import data: commodity type, CN code, annual volume, country of origin.
+              Get your exact annual CBAM obligation and certificate requirement. Calculation
+              methodology linked to official EU source (Implementing Regulation 2023/1603).
+            </p>
+            <span class="product-tag">Unlimited calculations</span>
+          </div>
+          <div class="product-tile">
+            <div class="product-tile-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                <polyline points="14 2 14 8 20 8" />
+                <line x1="9" y1="13" x2="15" y2="13" />
+                <line x1="9" y1="17" x2="15" y2="17" />
+                <polyline points="9 9 10 9 11 9" />
+              </svg>
+            </div>
+            <h3>Annual Declaration</h3>
+            <p>
+              Generate your Authorized Declarant declaration document in Annex IV format — exactly
+              as required by the EU CBAM Registry. Download and submit directly. No interpretation
+              needed. No consultant required.
+            </p>
+            <span class="product-tag">Annex IV format</span>
+          </div>
+          <div class="product-tile">
+            <div class="product-tile-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2" />
+                <path d="M3 9h18" />
+                <path d="M9 21V9" />
+              </svg>
+            </div>
+            <h3>Certificate Tracker</h3>
+            <p>
+              Track purchased CBAM certificates against your required obligation throughout the year.
+              Know your compliance exposure at any moment. Get alerts when you approach your deadline
+              or certificate shortfall.
+            </p>
+            <span class="product-tag">Real-time tracking</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── PRICING SECTION ─── -->
+    <section class="pricing-section" id="pricing">
+      <div class="container">
+        <div class="pricing-section-head">
+          <div class="section-eyebrow">Pricing</div>
+          <h2 class="section-h2">Start free. Upgrade when ready.</h2>
+          <p class="section-desc">
+            No contracts. Cancel any time. Pricing in EUR, billed per importer entity.
+          </p>
+        </div>
+        <div class="pricing-grid">
+          <!-- FREE -->
+          <div class="price-card">
+            <div class="tier-label">Free</div>
+            <div class="price-amount">€0<span class="period">/mo</span></div>
+            <p class="price-note">No credit card required</p>
+            <div class="price-divider"></div>
+            <ul class="feature-list">
+              <li>
+                <span class="check-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+                </span>
+                CBAM cost estimator (1 calculation)
+              </li>
+              <li>
+                <span class="check-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+                </span>
+                Basic obligation estimate
+              </li>
+              <li>
+                <span class="check-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+                </span>
+                Email report with calculation summary
+              </li>
+              <li class="dimmed"><span class="dash-icon">—</span>Full Authorized Declarant declaration</li>
+              <li class="dimmed"><span class="dash-icon">—</span>Certificate tracker</li>
+              <li class="dimmed"><span class="dash-icon">—</span>Unlimited calculations</li>
+            </ul>
+            <a href="#calculator" class="cta-outline">Calculate for free</a>
+          </div>
+
+          <!-- SINGLE IMPORTER (FEATURED) -->
+          <div class="price-card featured">
+            <div class="featured-pill">Most Popular</div>
+            <div class="tier-label">Single Importer</div>
+            <div class="price-amount"><sup>€</sup>29<span class="period">/mo</span></div>
+            <p class="price-note">€39/mo billed monthly · Save 26% annually</p>
+            <div class="price-divider"></div>
+            <ul class="feature-list">
+              <li>
+                <span class="check-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+                </span>
+                Unlimited CBAM calculations
+              </li>
+              <li>
+                <span class="check-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+                </span>
+                Full Authorized Declarant declaration (Annex IV)
+              </li>
+              <li>
+                <span class="check-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+                </span>
+                Certificate reconciliation tracker
+              </li>
+              <li>
+                <span class="check-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+                </span>
+                EU ETS price updates
+              </li>
+              <li>
+                <span class="check-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+                </span>
+                Email support
+              </li>
+              <li>
+                <span class="check-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+                </span>
+                Methodology linked to official EU source
+              </li>
+            </ul>
+            <a href="#" class="cta-primary" onclick="handleCheckout(event)">
+              Start free — upgrade when ready
+            </a>
+          </div>
+
+          <!-- BROKER PLAN (COMING SOON) -->
+          <div class="price-card dimmed">
+            <div class="coming-chip">Coming soon</div>
+            <div class="tier-label">Broker Plan</div>
+            <div class="price-amount" style="font-size: 1.9rem; letter-spacing: -0.02em">Multi-client</div>
+            <p class="price-note">For customs brokers managing 5+ CBAM clients</p>
+            <div class="price-divider"></div>
+            <ul class="feature-list">
+              <li>
+                <span class="check-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+                </span>
+                All Single Importer features
+              </li>
+              <li>
+                <span class="check-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+                </span>
+                Multi-client management dashboard
+              </li>
+              <li>
+                <span class="check-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+                </span>
+                Bulk calculation across clients
+              </li>
+              <li>
+                <span class="check-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+                </span>
+                White-label declaration documents
+              </li>
+              <li>
+                <span class="check-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+                </span>
+                Priority support
+              </li>
+              <li>
+                <span class="check-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+                </span>
+                Client reporting &amp; billing tools
+              </li>
+            </ul>
+            <button class="cta-waitlist" onclick="openWaitlist()">
+              Join waitlist — notify me first
+            </button>
+          </div>
+        </div>
+        <p class="pricing-footnote">
+          All plans include: calculation methodology based on EU Commission Implementing Regulation
+          2023/1603 · EU ETS price reference · mandatory disclaimer on all outputs
+        </p>
+      </div>
+    </section>
+
+    <!-- ─── FAQ SECTION ─── -->
+    <section class="faq-section" id="faq">
+      <div class="container">
+        <div class="faq-section-head">
+          <div class="section-eyebrow">FAQ</div>
+          <h2 class="section-h2">Common questions</h2>
+        </div>
+        <div class="faq-list">
+          <div class="faq-item">
+            <button class="faq-trigger" onclick="toggleFaq(this)">
+              I import less than 50 tonnes — do I need this?
+              <span class="faq-chevron">+</span>
+            </button>
+            <div class="faq-body">
+              <div class="faq-body-inner">
+                No. The 50-tonne annual threshold exempts micro-importers. If your total annual
+                imports of CBAM-covered goods (steel, cement, aluminum, fertilizers, hydrogen,
+                electricity) from non-EU countries are below 50 tonnes, you are not required to register
+                as an Authorized CBAM Declarant or file a CBAM declaration. You're free.
+              </div>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-trigger" onclick="toggleFaq(this)">
+              Which goods are in scope?
+              <span class="faq-chevron">+</span>
+            </button>
+            <div class="faq-body">
+              <div class="faq-body-inner">
+                CBAM currently covers: steel and iron products, cement, aluminum, fertilizers, hydrogen,
+                and electricity. If you import any of these from outside the EU and your annual volume
+                exceeds 50 tonnes, you're likely in scope. The EU Commission provides the full CN code
+                list in Annex I of Regulation (EU) 2023/956. When in doubt, check with your customs broker.
+              </div>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-trigger" onclick="toggleFaq(this)">
+              Is this an official EU tool?
+              <span class="faq-chevron">+</span>
+            </button>
+            <div class="faq-body">
+              <div class="faq-body-inner">
+                No. CBAM Toolkit is an independent compliance tool. The EU Commission provides official
+                guidance but no guided calculation or declaration tool for importers. You remain responsible
+                for verifying your declaration before submission to the EU CBAM Registry. Our calculation
+                methodology is based on the EU Commission's published Implementing Regulation 2023/1603,
+                and we link to the official source within the product. We are not affiliated with the EU
+                Commission or any national customs authority.
+              </div>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-trigger" onclick="toggleFaq(this)">
+              How accurate is the calculation?
+              <span class="faq-chevron">+</span>
+            </button>
+            <div class="faq-body">
+              <div class="faq-body-inner">
+                The calculation uses the EU Commission methodology from Implementing Regulation 2023/1603
+                and live EU ETS carbon prices. For standard import scenarios with goods from non-EU countries
+                that have no carbon pricing equivalent, the estimate is designed to be a reliable planning
+                baseline. Complex cases — multiple shipments with mixed origin, goods with partial carbon
+                pricing already paid in the origin country, or non-standard production processes — should
+                always be verified with a customs advisor before official submission.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── CTA BAND ─── -->
+    <div class="cta-band">
+      <div class="container cta-band-inner">
+        <h2>Start calculating in 2 minutes.</h2>
+        <p>
+          No account needed. Use the free estimator, then upgrade when you're ready to file.
+        </p>
+        <a href="#calculator" class="btn-primary" style="display: inline-flex">
+          Calculate my CBAM cost — Free
+        </a>
+      </div>
+    </div>
+
+    <!-- ─── FOOTER ─── -->
+    <footer>
+      <div class="inner">
+        <div>
+          <a href="#" class="footer-logo">
+            <div class="logo-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="7" height="7" rx="1" />
+                <rect x="14" y="3" width="7" height="7" rx="1" />
+                <rect x="3" y="14" width="7" height="7" rx="1" />
+                <path d="M17 17h.01M14 14h7v7h-7z" />
+              </svg>
+            </div>
+            <span class="logo-wordmark">CBAM<span class="dim">Toolkit</span></span>
+          </a>
+          <p class="footer-desc">
+            CBAM Toolkit is an independent compliance tool. Not affiliated with the European Commission
+            or any national customs authority. All outputs include mandatory disclaimer: estimates are
+            for planning purposes only.
+          </p>
+        </div>
+        <div class="footer-links-col">
+          <h4>Links</h4>
+          <div class="footer-links">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Use</a>
+            <a href="#">Contact</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        CBAM Toolkit is not affiliated with the European Commission or any national customs authority.
+        All calculation outputs are estimates for planning purposes only. Verify with a qualified customs
+        advisor before submitting official CBAM declarations.
+      </div>
+    </footer>
+
+    <!-- ─── BROKER WAITLIST MODAL ─── -->
+    <div class="modal-backdrop" id="waitlistModal">
+      <div class="modal">
+        <button class="modal-close" onclick="closeWaitlist()" aria-label="Close">&times;</button>
+        <h3>Join the Broker Plan waitlist</h3>
+        <p>
+          Be the first to know when multi-client management is available. We'll notify you before
+          public launch — no spam.
+        </p>
+        <div class="modal-field">
+          <label class="modal-label" for="brokerEmail">Work email</label>
+          <input type="email" id="brokerEmail" class="modal-input" placeholder="you@yourbrokerage.com" />
+        </div>
+        <div class="modal-field">
+          <label class="modal-label" for="brokerClients">
+            How many CBAM clients do you manage?
+            <span style="text-transform: none; letter-spacing: 0; font-weight: 400; color: var(--text-3)">(optional)</span>
+          </label>
+          <select id="brokerClients" class="modal-input">
+            <option value="">Select range...</option>
+            <option value="1-5">1–5 clients</option>
+            <option value="5-20">5–20 clients</option>
+            <option value="20-50">20–50 clients</option>
+            <option value="50+">50+ clients</option>
+          </select>
+        </div>
+        <div class="modal-actions">
+          <button class="cta-primary" style="flex: 1" onclick="submitWaitlist()">Join waitlist</button>
+          <button class="cta-outline" style="flex: none; padding: 0 20px" onclick="closeWaitlist()">Cancel</button>
+        </div>
+        <div class="modal-success" id="waitlistSuccess">
+          You're on the list. We'll reach out before the Broker Plan launches.
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // ── CALCULATOR ──────────────────────────────────────────────────────
+
+      const EMISSION_FACTORS = {
+        steel: 1.89,
+        cement: 0.76,
+        aluminum: 6.71,
+        fertilizers: 1.58,
+        hydrogen: 9.2,
+        electricity: 0.36,
+      };
+
+      const ETS_PRICE = 62.4;
+
+      function formatCurrency(val) {
+        if (val >= 1000000) return '€' + (val / 1000000).toFixed(2) + 'M';
+        if (val >= 10000) return '€' + Math.round(val).toLocaleString('en-EU');
+        return '€' + val.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      }
+
+      function runCalculation(e) {
+        e.preventDefault();
+        var category = document.getElementById('productCategory').value;
+        var volume = parseFloat(document.getElementById('importVolume').value) || 0;
+        var origin = document.getElementById('countryOrigin').value;
+        var carbonPaid = parseFloat(document.getElementById('carbonPricePaid').value) || 0;
+
+        if (!category || !volume || !origin) {
+          alert('Please fill in all required fields.');
+          return;
+        }
+
+        var emissionFactor = EMISSION_FACTORS[category] || 1.5;
+        var totalEmissions = emissionFactor * volume;
+        var effectivePriceDiff = Math.max(0, ETS_PRICE - carbonPaid);
+        var obligation = totalEmissions * effectivePriceDiff;
+
+        document.getElementById('resObligation').textContent = formatCurrency(obligation);
+        document.getElementById('resCerts').textContent = totalEmissions.toFixed(1) + ' tCO2';
+        document.getElementById('resEtsPrice').textContent = '€' + ETS_PRICE.toFixed(2);
+
+        var resultsEl = document.getElementById('calcResults');
+        resultsEl.classList.add('visible');
+        resultsEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+        window._calcData = { category, volume, origin, carbonPaid, obligation, totalEmissions };
+
+        // GA4 — calculator_submit event
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'calculator_submit', {
+            product_category: category,
+            import_volume: volume,
+            country_origin: origin,
+            obligation_estimate: Math.round(obligation),
+          });
+        }
+      }
+
+      // ── EMAIL GATE ────────────────────────────────────────────────────
+
+      function submitEmail() {
+        var email = document.getElementById('reportEmail').value.trim();
+        if (!email || !email.includes('@')) {
+          document.getElementById('reportEmail').focus();
+          return;
+        }
+
+        var btn = document.querySelector('#emailGate button');
+        if (btn) { btn.textContent = 'Sending...'; btn.disabled = true; }
+
+        var payload = Object.assign({ email: email }, window._calcData || {});
+
+        fetch('/api/capture', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        })
+          .then(function(r) { return r.json(); })
+          .then(function(data) {
+            if (data.success) {
+              if (typeof gtag !== 'undefined') {
+                gtag('event', 'email_capture', {
+                  category: 'lead_magnet',
+                  email_domain: email.split('@')[1],
+                });
+              }
+              document.getElementById('emailGate').style.display = 'none';
+              document.getElementById('emailSuccess').classList.add('visible');
+            } else {
+              if (btn) { btn.textContent = 'Send me the full report'; btn.disabled = false; }
+              alert(data.error || 'Something went wrong. Please try again.');
+            }
+          })
+          .catch(function() {
+            if (btn) { btn.textContent = 'Send me the full report'; btn.disabled = false; }
+            alert('Network error. Please try again.');
+          });
+      }
+
+      // ── FAQ ──────────────────────────────────────────────────────────
+
+      function toggleFaq(btn) {
+        var item = btn.closest('.faq-item');
+        var body = item.querySelector('.faq-body');
+        var isOpen = item.classList.contains('open');
+
+        document.querySelectorAll('.faq-item.open').forEach(function (el) {
+          el.classList.remove('open');
+          el.querySelector('.faq-body').style.maxHeight = '0';
+        });
+
+        if (!isOpen) {
+          item.classList.add('open');
+          body.style.maxHeight = body.scrollHeight + 'px';
+        }
+      }
+
+      // ── WAITLIST MODAL ───────────────────────────────────────────────
+
+      function openWaitlist() {
+        document.getElementById('waitlistModal').classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeWaitlist() {
+        document.getElementById('waitlistModal').classList.remove('open');
+        document.body.style.overflow = '';
+      }
+
+      function submitWaitlist() {
+        var email = document.getElementById('brokerEmail').value.trim();
+        if (!email || !email.includes('@')) {
+          document.getElementById('brokerEmail').focus();
+          return;
+        }
+        var clients = document.getElementById('brokerClients').value;
+
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'waitlist_signup', { category: 'broker_plan' });
+        }
+
+        // Capture broker waitlist via /api/capture
+        fetch('/api/capture', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: email, category: 'broker_waitlist', volume: clients }),
+        }).catch(function() {}); // fire-and-forget
+
+        document.getElementById('waitlistSuccess').classList.add('visible');
+        document.querySelector('#waitlistModal .modal-actions').style.display = 'none';
+      }
+
+      document.getElementById('waitlistModal').addEventListener('click', function (e) {
+        if (e.target === this) closeWaitlist();
+      });
+
+      // ── CHECKOUT ─────────────────────────────────────────────────────
+
+      function handleCheckout(e) {
+        e.preventDefault();
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'checkout_intent', { category: 'single_importer', value: 29 });
+        }
+        // Redirect to /api/checkout which forwards to the Stripe Payment Link
+        window.location.href = '/api/checkout';
+      }
+    </script>
+  </body>
+</html>
