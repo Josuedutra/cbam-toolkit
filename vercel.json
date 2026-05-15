@@ -1,9 +1,3 @@
 {
-  "outputDirectory": "public",
-  "framework": null,
-  "functions": {
-    "api/*.ts": {
-      "runtime": "@vercel/node@3"
-    }
-  }
+  "outputDirectory": "public"
 }
