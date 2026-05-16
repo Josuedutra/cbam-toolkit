@@ -21,7 +21,7 @@ function isRateLimited(ip: string): boolean {
 }
 
 const CATEGORY_LABELS: Record<string, string> = {
-  steel: 'Steel & Iron products',
+  steel: 'Steel &amp; Iron products',
   cement: 'Cement',
   aluminum: 'Aluminum',
   fertilizers: 'Fertilizers',
@@ -29,14 +29,24 @@ const CATEGORY_LABELS: Record<string, string> = {
   electricity: 'Electricity',
 };
 
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 function formatEuros(val: number): string {
   if (val >= 1_000_000) return `€${(val / 1_000_000).toFixed(2)}M`;
   return `€${Math.round(val).toLocaleString('en-EU')}`;
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  // CORS headers
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  // CORS: restrict to app domain; fallback to wildcard only in dev
+  const allowedOrigin = process.env.ALLOWED_ORIGIN || 'https://cbamtoolkit.com';
+  res.setHeader('Access-Control-Allow-Origin', allowedOrigin);
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
@@ -65,7 +75,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   const fromEmail = process.env.FROM_EMAIL || 'noreply@useritmo.pt';
-  const categoryLabel = CATEGORY_LABELS[category as string] || (category as string) || 'N/A';
+  const categoryLabel = escapeHtml(
+    CATEGORY_LABELS[category as string] || (category as string) || 'N/A',
+  );
+  const safeVolume = escapeHtml(String(volume || ''));
+  const safeCountry = escapeHtml(String(country || ''));
   const obligationNum = Number(obligation) || 0;
   const emissionsNum = Number(totalEmissions) || 0;
 
@@ -127,8 +141,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         <p style="margin:0 0 16px;font-size:12px;font-weight:500;letter-spacing:0.04em;text-transform:uppercase;color:#71717a;">Calculation Details</p>
         <table style="width:100%;border-collapse:collapse;font-size:14px;">
           ${category ? `<tr><td style="padding:8px 0;color:#71717a;border-bottom:1px solid rgba(255,255,255,0.06);">Product category</td><td style="padding:8px 0;text-align:right;font-weight:500;border-bottom:1px solid rgba(255,255,255,0.06);">${categoryLabel}</td></tr>` : ''}
-          ${volume ? `<tr><td style="padding:8px 0;color:#71717a;border-bottom:1px solid rgba(255,255,255,0.06);">Annual import volume</td><td style="padding:8px 0;text-align:right;font-weight:500;border-bottom:1px solid rgba(255,255,255,0.06);">${volume} tonnes</td></tr>` : ''}
-          ${country ? `<tr><td style="padding:8px 0;color:#71717a;border-bottom:1px solid rgba(255,255,255,0.06);">Country of origin</td><td style="padding:8px 0;text-align:right;font-weight:500;border-bottom:1px solid rgba(255,255,255,0.06);">${country}</td></tr>` : ''}
+          ${safeVolume ? `<tr><td style="padding:8px 0;color:#71717a;border-bottom:1px solid rgba(255,255,255,0.06);">Annual import volume</td><td style="padding:8px 0;text-align:right;font-weight:500;border-bottom:1px solid rgba(255,255,255,0.06);">${safeVolume} tonnes</td></tr>` : ''}
+          ${safeCountry ? `<tr><td style="padding:8px 0;color:#71717a;border-bottom:1px solid rgba(255,255,255,0.06);">Country of origin</td><td style="padding:8px 0;text-align:right;font-weight:500;border-bottom:1px solid rgba(255,255,255,0.06);">${safeCountry}</td></tr>` : ''}
           ${emissionsNum > 0 ? `<tr><td style="padding:8px 0;color:#71717a;">Total embedded emissions</td><td style="padding:8px 0;text-align:right;font-weight:500;">${emissionsNum.toFixed(1)} tCO₂</td></tr>` : ''}
         </table>
       </div>
