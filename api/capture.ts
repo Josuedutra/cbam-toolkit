@@ -77,6 +77,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     country,
     obligation,
     totalEmissions,
+    emissionsPerTonne,
+    etsPriceUsed,
+    carbonPaid,
   } = (req.body as Record<string, unknown>) || {};
 
   if (!email || typeof email !== "string" || !email.includes("@")) {
@@ -91,6 +94,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const safeCountry = escapeHtml(String(country || ""));
   const obligationNum = Number(obligation) || 0;
   const emissionsNum = Number(totalEmissions) || 0;
+  const emissionsPerTonneNum = Number(emissionsPerTonne) || 0;
+  const etsPriceNum = Number(etsPriceUsed) || 0;
+  const carbonPaidNum = Number(carbonPaid) || 0;
 
   // Log the lead (visible in Vercel function logs)
   console.log("CBAM lead captured:", {
@@ -152,7 +158,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           ${category ? `<tr><td style="padding:8px 0;color:#71717a;border-bottom:1px solid rgba(255,255,255,0.06);">Product category</td><td style="padding:8px 0;text-align:right;font-weight:500;border-bottom:1px solid rgba(255,255,255,0.06);">${categoryLabel}</td></tr>` : ""}
           ${safeVolume ? `<tr><td style="padding:8px 0;color:#71717a;border-bottom:1px solid rgba(255,255,255,0.06);">Annual import volume</td><td style="padding:8px 0;text-align:right;font-weight:500;border-bottom:1px solid rgba(255,255,255,0.06);">${safeVolume} tonnes</td></tr>` : ""}
           ${safeCountry ? `<tr><td style="padding:8px 0;color:#71717a;border-bottom:1px solid rgba(255,255,255,0.06);">Country of origin</td><td style="padding:8px 0;text-align:right;font-weight:500;border-bottom:1px solid rgba(255,255,255,0.06);">${safeCountry}</td></tr>` : ""}
-          ${emissionsNum > 0 ? `<tr><td style="padding:8px 0;color:#71717a;">Total embedded emissions</td><td style="padding:8px 0;text-align:right;font-weight:500;">${emissionsNum.toFixed(1)} tCO₂</td></tr>` : ""}
+          ${emissionsPerTonneNum > 0 ? `<tr><td style="padding:8px 0;color:#71717a;border-bottom:1px solid rgba(255,255,255,0.06);">Embedded emissions (default factor)</td><td style="padding:8px 0;text-align:right;font-weight:500;border-bottom:1px solid rgba(255,255,255,0.06);">${emissionsPerTonneNum.toFixed(2)} tCO₂/t</td></tr>` : ""}
+          ${emissionsNum > 0 ? `<tr><td style="padding:8px 0;color:#71717a;border-bottom:1px solid rgba(255,255,255,0.06);">Total embedded emissions</td><td style="padding:8px 0;text-align:right;font-weight:500;border-bottom:1px solid rgba(255,255,255,0.06);">${emissionsNum.toLocaleString("en-EU", { maximumFractionDigits: 1 })} tCO₂</td></tr>` : ""}
+          ${etsPriceNum > 0 ? `<tr><td style="padding:8px 0;color:#71717a;border-bottom:1px solid rgba(255,255,255,0.06);">EU ETS carbon price used</td><td style="padding:8px 0;text-align:right;font-weight:500;border-bottom:1px solid rgba(255,255,255,0.06);">€${etsPriceNum.toFixed(2)}/tCO₂</td></tr>` : ""}
+          ${carbonPaidNum > 0 ? `<tr><td style="padding:8px 0;color:#71717a;border-bottom:1px solid rgba(255,255,255,0.06);">Carbon price paid in origin country</td><td style="padding:8px 0;text-align:right;font-weight:500;border-bottom:1px solid rgba(255,255,255,0.06);">€${carbonPaidNum.toFixed(2)}/tCO₂</td></tr>` : ""}
+          ${obligationNum > 0 ? `<tr><td style="padding:8px 0;color:#71717a;">Estimated CBAM obligation</td><td style="padding:8px 0;text-align:right;font-weight:700;color:#479fff;">${formatEuros(obligationNum)}</td></tr>` : ""}
         </table>
       </div>
 

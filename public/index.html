@@ -1203,10 +1203,36 @@
           alert("Please enter your email address.");
           return;
         }
+
+        // Collect calculator inputs
+        var category = document.getElementById("calcProduct").value;
+        var volume =
+          parseFloat(document.getElementById("calcVolume").value) || 0;
+        var country = document.getElementById("calcOrigin").value;
+        var carbonPaid =
+          parseFloat(document.getElementById("calcCarbon").value) || 0;
+
+        // Recompute derived values (same formula as runCalculation)
+        var emissionFactor = EMISSION_FACTORS[category] || 0;
+        var totalEmissions = emissionFactor * volume;
+        var netCarbonPrice = Math.max(0, ETS_PRICE - carbonPaid);
+        var obligation = totalEmissions * netCarbonPrice;
+
         fetch("/api/capture", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: email, source: "calculator" }),
+          body: JSON.stringify({
+            email: email,
+            source: "calculator",
+            category: category,
+            volume: volume,
+            country: country,
+            totalEmissions: totalEmissions,
+            obligation: obligation,
+            emissionsPerTonne: emissionFactor,
+            etsPriceUsed: ETS_PRICE,
+            carbonPaid: carbonPaid,
+          }),
         })
           .then(function (r) {
             return r.ok
