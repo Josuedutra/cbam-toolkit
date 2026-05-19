@@ -22,34 +22,39 @@
     <!-- Google Consent Mode v2 — must fire BEFORE gtag.js loads -->
     <script>
       window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
+      function gtag() {
+        dataLayer.push(arguments);
+      }
 
       // Default: deny all until user consents (GDPR/EEE compliant)
-      gtag('consent', 'default', {
-        'ad_storage': 'denied',
-        'ad_user_data': 'denied',
-        'ad_personalization': 'denied',
-        'analytics_storage': 'denied',
-        'wait_for_update': 500
+      gtag("consent", "default", {
+        ad_storage: "denied",
+        ad_user_data: "denied",
+        ad_personalization: "denied",
+        analytics_storage: "denied",
+        wait_for_update: 500,
       });
 
       // Check if user already consented in a previous visit
-      if (localStorage.getItem('cbam_consent') === 'granted') {
-        gtag('consent', 'update', {
-          'ad_storage': 'granted',
-          'ad_user_data': 'granted',
-          'ad_personalization': 'granted',
-          'analytics_storage': 'granted'
+      if (localStorage.getItem("cbam_consent") === "granted") {
+        gtag("consent", "update", {
+          ad_storage: "granted",
+          ad_user_data: "granted",
+          ad_personalization: "granted",
+          analytics_storage: "granted",
         });
       }
     </script>
 
     <!-- Google tag (gtag.js) — GA4 + Google Ads -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZYBJRVS4EP"></script>
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-ZYBJRVS4EP"
+    ></script>
     <script>
-      gtag('js', new Date());
-      gtag('config', 'G-ZYBJRVS4EP');
-      gtag('config', 'AW-18174252339');
+      gtag("js", new Date());
+      gtag("config", "G-ZYBJRVS4EP");
+      gtag("config", "AW-18174252339");
     </script>
 
     <style>
@@ -147,6 +152,7 @@
         position: sticky;
         top: 0;
         z-index: 10;
+        background: color-mix(in oklab, var(--fg), var(--accent) 16%);
         backdrop-filter: blur(16px);
         border-bottom: 1px solid
           color-mix(in oklab, var(--surface), transparent 88%);
@@ -692,7 +698,9 @@
           <a href="#features">Features</a>
           <a href="#calculator">Calculator</a>
           <a href="#pricing">Pricing</a>
-          <a class="btn btn-primary" href="https://buy.stripe.com/7sYeVceDD9Tnbiv3Io8IU00"
+          <a
+            class="btn btn-primary"
+            href="https://buy.stripe.com/7sYeVceDD9Tnbiv3Io8IU00"
             >Early access</a
           >
         </div>
@@ -710,10 +718,7 @@
               data monitoring, and quarterly report preparation for European
               importers of steel, aluminium, cement, and fertilizers.
             </p>
-            <form
-              class="signup"
-              id="heroSignupForm"
-            >
+            <form class="signup" id="heroSignupForm">
               <input
                 type="email"
                 name="email"
@@ -809,8 +814,8 @@
             <span class="eyebrow">Free CBAM calculator</span>
             <h2>Estimate your 2026 CBAM obligation in 2 minutes</h2>
             <p>
-              Enter your import details. Get an instant breakdown of certificates
-              needed and estimated cost.
+              Enter your import details. Get an instant breakdown of
+              certificates needed and estimated cost.
             </p>
           </div>
 
@@ -895,7 +900,9 @@
             <div class="result-tiles">
               <div class="result-tile">
                 <div class="tile-value" id="resultObligation">—</div>
-                <div class="tile-label">Estimated annual CBAM obligation (EUR)</div>
+                <div class="tile-label">
+                  Estimated annual CBAM obligation (EUR)
+                </div>
               </div>
               <div class="result-tile">
                 <div class="tile-value" id="resultCerts">—</div>
@@ -903,7 +910,9 @@
               </div>
               <div class="result-tile">
                 <div class="tile-value" id="resultETS">—</div>
-                <div class="tile-label">EU ETS carbon price used (EUR/tCO₂)</div>
+                <div class="tile-label">
+                  EU ETS carbon price used (EUR/tCO₂)
+                </div>
               </div>
             </div>
 
@@ -922,7 +931,11 @@
                 placeholder="work@email.com"
                 aria-label="Work email"
               />
-              <button class="btn btn-primary" type="button" onclick="sendReport()">
+              <button
+                class="btn btn-primary"
+                type="button"
+                onclick="sendReport()"
+              >
                 Send me the full report
               </button>
             </div>
@@ -946,23 +959,38 @@
             <div class="tier-card">
               <div>
                 <div class="tier-name">Free</div>
-                <div class="tier-price" style="margin-top: var(--space-3);">
+                <div class="tier-price" style="margin-top: var(--space-3)">
                   €0<small>/mo</small>
                 </div>
                 <div class="tier-save">No credit card required</div>
               </div>
               <ul class="tier-features">
                 <li><span class="feat-yes">✓</span> 1 calculation per month</li>
-                <li><span class="feat-yes">✓</span> Basic estimate with CN codes</li>
+                <li>
+                  <span class="feat-yes">✓</span> Basic estimate with CN codes
+                </li>
                 <li><span class="feat-yes">✓</span> Email report (PDF)</li>
-                <li><span class="feat-no">✕</span> <span style="color:var(--muted);">Full Annex IV declaration</span></li>
-                <li><span class="feat-no">✕</span> <span style="color:var(--muted);">Certificate tracker</span></li>
-                <li><span class="feat-no">✕</span> <span style="color:var(--muted);">Unlimited calculations</span></li>
+                <li>
+                  <span class="feat-no">✕</span>
+                  <span style="color: var(--muted)"
+                    >Full Annex IV declaration</span
+                  >
+                </li>
+                <li>
+                  <span class="feat-no">✕</span>
+                  <span style="color: var(--muted)">Certificate tracker</span>
+                </li>
+                <li>
+                  <span class="feat-no">✕</span>
+                  <span style="color: var(--muted)"
+                    >Unlimited calculations</span
+                  >
+                </li>
               </ul>
               <a
                 class="btn btn-outline"
                 href="#calculator"
-                style="width: 100%; text-align: center;"
+                style="width: 100%; text-align: center"
                 >Start free</a
               >
             </div>
@@ -971,12 +999,17 @@
             <div class="tier-card featured">
               <div>
                 <div
-                  style="display: flex; align-items: center; justify-content: space-between; gap: var(--space-3);"
+                  style="
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: var(--space-3);
+                  "
                 >
                   <div class="tier-name">Single Importer</div>
                   <span class="tier-pill">Most popular</span>
                 </div>
-                <div class="tier-price" style="margin-top: var(--space-3);">
+                <div class="tier-price" style="margin-top: var(--space-3)">
                   €29<small>/mo annual</small>
                 </div>
                 <div class="tier-save">€39 monthly · Save 26% annually</div>
@@ -992,7 +1025,7 @@
               <a
                 class="btn btn-primary"
                 href="https://buy.stripe.com/7sYeVceDD9Tnbiv3Io8IU00"
-                style="width: 100%; text-align: center;"
+                style="width: 100%; text-align: center"
                 >Request early access</a
               >
             </div>
@@ -1001,28 +1034,37 @@
             <div class="tier-card dimmed">
               <div>
                 <div
-                  style="display: flex; align-items: center; justify-content: space-between; gap: var(--space-3);"
+                  style="
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: var(--space-3);
+                  "
                 >
                   <div class="tier-name">Broker Plan</div>
                   <span class="tier-chip">Coming Soon</span>
                 </div>
-                <div class="tier-price" style="margin-top: var(--space-3);">
+                <div class="tier-price" style="margin-top: var(--space-3)">
                   Multi-client<small> pricing</small>
                 </div>
                 <div class="tier-save">&nbsp;</div>
               </div>
               <ul class="tier-features">
-                <li><span class="feat-yes">✓</span> Everything in Single Importer</li>
+                <li>
+                  <span class="feat-yes">✓</span> Everything in Single Importer
+                </li>
                 <li><span class="feat-yes">✓</span> Multi-client dashboard</li>
                 <li><span class="feat-yes">✓</span> Bulk calculations</li>
-                <li><span class="feat-yes">✓</span> White-label documentation</li>
+                <li>
+                  <span class="feat-yes">✓</span> White-label documentation
+                </li>
                 <li><span class="feat-yes">✓</span> Priority support</li>
                 <li><span class="feat-yes">✓</span> Client billing tools</li>
               </ul>
               <a
                 class="btn btn-outline"
                 href="mailto:hello@cbamtoolkit.com?subject=Broker%20Plan%20Waitlist"
-                style="width: 100%; text-align: center;"
+                style="width: 100%; text-align: center"
                 >Join the waitlist</a
               >
             </div>
@@ -1048,8 +1090,8 @@
                 cement, aluminium, fertilizers, hydrogen, electricity) are below
                 50 tonnes per year, you are currently exempt from the
                 transitional reporting obligation. However, this threshold
-                applies to the total, not per product — and it may be revised
-                as CBAM moves from the transitional to the definitive phase in
+                applies to the total, not per product — and it may be revised as
+                CBAM moves from the transitional to the definitive phase in
                 2026. We recommend tracking your volumes now to avoid
                 last-minute compliance gaps.
               </div>
@@ -1080,9 +1122,9 @@
                 No. CBAM Toolkit is an independent SaaS product and is not
                 affiliated with, endorsed by, or operated by the European
                 Commission, TAXUD, or any EU institution. The official CBAM
-                transitional registry is managed by the European Commission.
-                Our tool is designed to help importers prepare and organise
-                their data before submitting reports through official channels.
+                transitional registry is managed by the European Commission. Our
+                tool is designed to help importers prepare and organise their
+                data before submitting reports through official channels.
               </div>
             </div>
 
@@ -1094,11 +1136,11 @@
               <div class="faq-answer">
                 Our calculator uses the default emission factors published by
                 the European Commission in Annex IV of the CBAM Implementing
-                Regulation, combined with live EU ETS carbon price data. For
-                the definitive phase, importers must use actual embedded
-                emissions verified by an accredited verifier — our default
-                factors are a conservative proxy for planning purposes. If your
-                supplier has a verified specific emission value, you can use the
+                Regulation, combined with live EU ETS carbon price data. For the
+                definitive phase, importers must use actual embedded emissions
+                verified by an accredited verifier — our default factors are a
+                conservative proxy for planning purposes. If your supplier has a
+                verified specific emission value, you can use the
                 carbon-price-paid field to adjust the net obligation downward.
               </div>
             </div>
@@ -1142,7 +1184,8 @@
         var obligation = certificates * netCarbonPrice;
 
         document.getElementById("resultObligation").textContent =
-          "€" + obligation.toLocaleString("en-EU", { maximumFractionDigits: 2 });
+          "€" +
+          obligation.toLocaleString("en-EU", { maximumFractionDigits: 2 });
         document.getElementById("resultCerts").textContent =
           certificates.toLocaleString("en-EU", { maximumFractionDigits: 2 }) +
           " tCO₂";
@@ -1156,17 +1199,29 @@
 
       function sendReport() {
         var email = document.getElementById("gateEmail").value;
-        if (!email) { alert("Please enter your email address."); return; }
+        if (!email) {
+          alert("Please enter your email address.");
+          return;
+        }
         fetch("/api/capture", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: email, source: "calculator" })
+          body: JSON.stringify({ email: email, source: "calculator" }),
         })
-        .then(function(r) { return r.ok ? r.json() : r.json().then(function(d) { return Promise.reject(d); }); })
-        .then(function() {
-          document.querySelector(".email-gate").innerHTML = '<p style="color:#22c55e">Report sent! Check your inbox.</p>';
-        })
-        .catch(function(err) { alert("Error: " + (err.message || "Network error")); });
+          .then(function (r) {
+            return r.ok
+              ? r.json()
+              : r.json().then(function (d) {
+                  return Promise.reject(d);
+                });
+          })
+          .then(function () {
+            document.querySelector(".email-gate").innerHTML =
+              '<p style="color:#22c55e">Report sent! Check your inbox.</p>';
+          })
+          .catch(function (err) {
+            alert("Error: " + (err.message || "Network error"));
+          });
       }
 
       function toggleFaq(btn) {
@@ -1206,7 +1261,7 @@
               } else {
                 alert(
                   (data && data.error) ||
-                    "Something went wrong. Please try again."
+                    "Something went wrong. Please try again.",
                 );
               }
             })
@@ -1217,33 +1272,94 @@
       });
     </script>
     <!-- Cookie Consent Banner -->
-    <div id="cookie-banner" style="display:none; position:fixed; bottom:0; left:0; right:0; background:#061b31; color:#fff; padding:16px 24px; z-index:9999; font-size:14px; line-height:1.5; box-shadow:0 -2px 12px rgba(0,0,0,.15);">
-      <div style="max-width:960px; margin:0 auto; display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
-        <p style="margin:0; flex:1; min-width:240px;">We use cookies to measure site performance and improve your experience. By accepting, you consent to analytics and advertising cookies. <a href="https://cbamtoolkit.com/privacy" style="color:#60a5fa; text-decoration:underline;">Privacy Policy</a></p>
-        <div style="display:flex; gap:8px; flex-shrink:0;">
-          <button onclick="acceptCookies()" style="background:#2563eb; color:#fff; border:none; padding:8px 20px; border-radius:6px; cursor:pointer; font-size:14px; font-weight:600;">Accept</button>
-          <button onclick="rejectCookies()" style="background:transparent; color:#94a3b8; border:1px solid #334155; padding:8px 20px; border-radius:6px; cursor:pointer; font-size:14px;">Reject</button>
+    <div
+      id="cookie-banner"
+      style="
+        display: none;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: #061b31;
+        color: #fff;
+        padding: 16px 24px;
+        z-index: 9999;
+        font-size: 14px;
+        line-height: 1.5;
+        box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.15);
+      "
+    >
+      <div
+        style="
+          max-width: 960px;
+          margin: 0 auto;
+          display: flex;
+          align-items: center;
+          gap: 16px;
+          flex-wrap: wrap;
+        "
+      >
+        <p style="margin: 0; flex: 1; min-width: 240px">
+          We use cookies to measure site performance and improve your
+          experience. By accepting, you consent to analytics and advertising
+          cookies.
+          <a
+            href="https://cbamtoolkit.com/privacy"
+            style="color: #60a5fa; text-decoration: underline"
+            >Privacy Policy</a
+          >
+        </p>
+        <div style="display: flex; gap: 8px; flex-shrink: 0">
+          <button
+            onclick="acceptCookies()"
+            style="
+              background: #2563eb;
+              color: #fff;
+              border: none;
+              padding: 8px 20px;
+              border-radius: 6px;
+              cursor: pointer;
+              font-size: 14px;
+              font-weight: 600;
+            "
+          >
+            Accept
+          </button>
+          <button
+            onclick="rejectCookies()"
+            style="
+              background: transparent;
+              color: #94a3b8;
+              border: 1px solid #334155;
+              padding: 8px 20px;
+              border-radius: 6px;
+              cursor: pointer;
+              font-size: 14px;
+            "
+          >
+            Reject
+          </button>
         </div>
       </div>
     </div>
     <script>
       // Show banner only if user hasn't chosen yet
-      if (!localStorage.getItem('cbam_consent')) {
-        document.getElementById('cookie-banner').style.display = 'block';
+      if (!localStorage.getItem("cbam_consent")) {
+        document.getElementById("cookie-banner").style.display = "block";
       }
       function acceptCookies() {
-        localStorage.setItem('cbam_consent', 'granted');
-        gtag('consent', 'update', {
-          'ad_storage': 'granted',
-          'ad_user_data': 'granted',
-          'ad_personalization': 'granted',
-          'analytics_storage': 'granted'
+        localStorage.setItem("cbam_consent", "granted");
+        gtag("consent", "update", {
+          ad_storage: "granted",
+          ad_user_data: "granted",
+          ad_personalization: "granted",
+          analytics_storage: "granted",
         });
-        document.getElementById('cookie-banner').style.display = 'none';
+        document.getElementById("cookie-banner").style.display = "none";
       }
       function rejectCookies() {
-        localStorage.setItem('cbam_consent', 'denied');
-        document.getElementById('cookie-banner').style.display = 'none';
+        localStorage.setItem("cbam_consent", "denied");
+        document.getElementById("cookie-banner").style.display = "none";
       }
     </script>
   </body>
