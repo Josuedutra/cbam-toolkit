@@ -1,9 +1,11 @@
+import { createHash } from "crypto";
 import type { VercelRequest, VercelResponse } from "@vercel/node";
+import { kv } from "@vercel/kv";
 import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-// In-memory rate limiter: 10 requests per IP per hour
+// In-memory rate limiter: 10 requests per IP per hour (anti-flood, not quota)
 const ipRequests = new Map<string, { count: number; resetAt: number }>();
 
 function isRateLimited(ip: string): boolean {
@@ -18,6 +20,35 @@ function isRateLimited(ip: string): boolean {
   if (entry.count >= 10) return true;
   entry.count++;
   return false;
+}
+
+// Free-tier quota: 1 calculation per rolling 30-day window, keyed by email hash.
+// Requires Vercel KV (KV_REST_API_URL + KV_REST_API_TOKEN env vars).
+// If KV is not configured, logs a warning and allows the request (graceful degradation).
+const QUOTA_WINDOW_SECONDS = 30 * 24 * 60 * 60; // 30 days
+
+function emailQuotaKey(email: string): string {
+  const hash = createHash("sha256")
+    .update(email.toLowerCase().trim())
+    .digest("hex")
+    .slice(0, 32);
+  return `cbam-quota:${hash}`;
+}
+
+async function isQuotaExceeded(email: string): Promise<boolean> {
+  if (!process.env.KV_REST_API_URL || !process.env.KV_REST_API_TOKEN) {
+    console.warn("cbam-quota: KV not configured — quota check skipped");
+    return false;
+  }
+  const key = emailQuotaKey(email);
+  const existing = await kv.get<number>(key);
+  return existing !== null;
+}
+
+async function recordQuotaUsage(email: string): Promise<void> {
+  if (!process.env.KV_REST_API_URL || !process.env.KV_REST_API_TOKEN) return;
+  const key = emailQuotaKey(email);
+  await kv.set(key, Date.now(), { ex: QUOTA_WINDOW_SECONDS });
 }
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -84,6 +115,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   if (!email || typeof email !== "string" || !email.includes("@")) {
     return res.status(400).json({ error: "Valid email required" });
+  }
+
+  // Free-tier quota check: 1 calculation per rolling 30-day window per email
+  // Only applies when the request includes calculator fields (not plain email signups)
+  if (category !== undefined) {
+    if (await isQuotaExceeded(email as string)) {
+      return res.status(429).json({
+        code: "QUOTA_EXCEEDED",
+        error:
+          "You've used your free calculation this month. Upgrade to Single Importer (€29/month) for unlimited calculations.",
+      });
+    }
   }
 
   const fromEmail = "reports@cbamtoolkit.com";
@@ -200,6 +243,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     // D+3 follow-up: scheduled via external cron (not implemented in serverless function)
     // TODO: Trigger a D+3 follow-up job via Resend Broadcasts or a cron endpoint
+
+    // Record quota usage AFTER successful email send (calculator requests only)
+    if (category !== undefined) {
+      await recordQuotaUsage(email as string);
+    }
 
     return res.status(200).json({ success: true });
   } catch (err) {

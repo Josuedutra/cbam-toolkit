@@ -1246,7 +1246,15 @@
               '<p style="color:#22c55e">Report sent! Check your inbox.</p>';
           })
           .catch(function (err) {
-            alert("Error: " + (err.message || "Network error"));
+            if (err && err.code === "QUOTA_EXCEEDED") {
+              document.querySelector(".email-gate").innerHTML =
+                '<p style="color:#f97316;font-size:14px;line-height:1.6;">' +
+                "You\u2019ve used your free calculation this month. " +
+                '<a href="/#pricing" style="color:#479fff;font-weight:600;">Upgrade to Single Importer (\u20ac29/month)</a> for unlimited calculations.' +
+                "</p>";
+            } else {
+              alert("Error: " + (err.message || "Network error"));
+            }
           });
       }
 
