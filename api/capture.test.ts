@@ -1,14 +1,20 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
 // vi.hoisted ensures mockSend is available in the vi.mock factory (which is hoisted to the top)
-const { mockSend } = vi.hoisted(() => ({
+const { mockSend, mockKvGet, mockKvSet } = vi.hoisted(() => ({
   mockSend: vi.fn().mockResolvedValue({ id: "email-id-123" }),
+  mockKvGet: vi.fn().mockResolvedValue(null),
+  mockKvSet: vi.fn().mockResolvedValue("OK"),
 }));
 
 vi.mock("resend", () => ({
   Resend: vi.fn().mockImplementation(() => ({
     emails: { send: mockSend },
   })),
+}));
+
+vi.mock("@vercel/kv", () => ({
+  kv: { get: mockKvGet, set: mockKvSet },
 }));
 
 import handler from "./capture";
@@ -44,8 +50,13 @@ function makeReqRes(body: Record<string, unknown>, ip = "127.0.0.1") {
 describe("capture handler — data pipeline", () => {
   beforeEach(() => {
     mockSend.mockClear();
+    mockKvGet.mockClear();
+    mockKvSet.mockClear();
+    mockKvGet.mockResolvedValue(null); // default: no prior calc
     process.env.RESEND_API_KEY = "re_test_key";
     process.env.ALLOWED_ORIGIN = "https://cbamtoolkit.com";
+    process.env.KV_REST_API_URL = "https://test.kv.vercel-storage.com";
+    process.env.KV_REST_API_TOKEN = "test-token";
   });
 
   it("sends email with all calculator fields in body", async () => {
@@ -201,5 +212,103 @@ describe("capture handler — data pipeline", () => {
     await handler(req, res);
     expect(statusCode).toBe(200);
     expect(mockSend).not.toHaveBeenCalled();
+  });
+});
+
+const calcBody = {
+  email: "importer@example.com",
+  category: "steel",
+  volume: 250,
+  country: "India",
+  totalEmissions: 472.5,
+  obligation: 29484,
+  emissionsPerTonne: 1.89,
+  etsPriceUsed: 62.4,
+  carbonPaid: 0,
+};
+
+describe("capture handler — free-tier quota enforcement", () => {
+  beforeEach(() => {
+    mockSend.mockClear();
+    mockKvGet.mockClear();
+    mockKvSet.mockClear();
+    mockKvGet.mockResolvedValue(null); // default: no prior calc
+    process.env.RESEND_API_KEY = "re_test_key";
+    process.env.ALLOWED_ORIGIN = "https://cbamtoolkit.com";
+    process.env.KV_REST_API_URL = "https://test.kv.vercel-storage.com";
+    process.env.KV_REST_API_TOKEN = "test-token";
+  });
+
+  it("T1: first calculation succeeds and records quota", async () => {
+    mockKvGet.mockResolvedValue(null); // no prior calc
+    const { req, res } = makeReqRes(calcBody, "10.0.0.1");
+    await handler(req, res);
+
+    expect(res._getStatus()).toBe(200);
+    expect(mockSend).toHaveBeenCalledOnce();
+    expect(mockKvSet).toHaveBeenCalledOnce();
+    // TTL should be 30 days in seconds
+    const setCall = mockKvSet.mock.calls[0];
+    expect(setCall[2]).toMatchObject({ ex: 30 * 24 * 60 * 60 });
+  });
+
+  it("T2: second calculation from same email is blocked — 429 QUOTA_EXCEEDED", async () => {
+    mockKvGet.mockResolvedValue(Date.now() - 1000); // prior calc exists
+    const { req, res } = makeReqRes(calcBody, "10.0.0.2");
+    await handler(req, res);
+
+    expect(res._getStatus()).toBe(429);
+    expect((res._getBody() as any).code).toBe("QUOTA_EXCEEDED");
+    expect(mockSend).not.toHaveBeenCalled();
+    expect(mockKvSet).not.toHaveBeenCalled();
+  });
+
+  it("T3: different email succeeds independently", async () => {
+    mockKvGet.mockResolvedValue(null); // no prior calc for this email
+    const { req, res } = makeReqRes(
+      { ...calcBody, email: "other@company.com" },
+      "10.0.0.3",
+    );
+    await handler(req, res);
+
+    expect(res._getStatus()).toBe(200);
+    expect(mockSend).toHaveBeenCalledOnce();
+  });
+
+  it("T4: after 30-day TTL expires (KV returns null), same email succeeds", async () => {
+    // Simulate KV TTL expiry: key no longer exists
+    mockKvGet.mockResolvedValue(null);
+    const { req, res } = makeReqRes(calcBody, "10.0.0.4");
+    await handler(req, res);
+
+    expect(res._getStatus()).toBe(200);
+    expect(mockSend).toHaveBeenCalledOnce();
+  });
+
+  it("T5: plain email signup (no category) bypasses quota check", async () => {
+    // Hero form signup — no calculator fields
+    const { req, res } = makeReqRes(
+      { email: "signup@example.com" },
+      "10.0.0.5",
+    );
+    await handler(req, res);
+
+    // Quota KV should NOT be checked for non-calculator requests
+    expect(mockKvGet).not.toHaveBeenCalled();
+    // Email send may or may not happen (no category = minimal email), just no quota block
+    expect(res._getStatus()).not.toBe(429);
+  });
+
+  it("T6: quota check skipped gracefully when KV not configured", async () => {
+    delete process.env.KV_REST_API_URL;
+    delete process.env.KV_REST_API_TOKEN;
+    // Even if KV says prior calc exists, with no config it should pass through
+    mockKvGet.mockResolvedValue(Date.now());
+    const { req, res } = makeReqRes(calcBody, "10.0.0.6");
+    await handler(req, res);
+
+    // Should succeed — no KV check performed
+    expect(mockKvGet).not.toHaveBeenCalled();
+    expect(res._getStatus()).toBe(200);
   });
 });

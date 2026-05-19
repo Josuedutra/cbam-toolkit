@@ -6,6 +6,7 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@vercel/kv": "^3.0.0",
     "resend": "^3.0.0"
   },
   "devDependencies": {
