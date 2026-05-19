@@ -679,13 +679,12 @@
             </p>
             <form
               class="signup"
-              action="mailto:hello@cbamtoolkit.com"
-              method="post"
-              enctype="text/plain"
+              id="heroSignupForm"
             >
               <input
                 type="email"
                 name="email"
+                id="heroEmail"
                 placeholder="work@email.com"
                 aria-label="Work email"
                 required
@@ -1149,6 +1148,40 @@
           item.classList.add("open");
         }
       }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        var heroForm = document.getElementById("heroSignupForm");
+        if (!heroForm) return;
+        heroForm.addEventListener("submit", function (e) {
+          e.preventDefault();
+          var emailInput = document.getElementById("heroEmail");
+          var email = emailInput ? emailInput.value : "";
+          if (!email) return;
+
+          fetch("/api/capture", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: email }),
+          })
+            .then(function (res) {
+              return res.json();
+            })
+            .then(function (data) {
+              if (data && data.success) {
+                heroForm.outerHTML =
+                  '<p style="color:#22c55e;font-weight:500;">Thanks! Check your inbox.</p>';
+              } else {
+                alert(
+                  (data && data.error) ||
+                    "Something went wrong. Please try again."
+                );
+              }
+            })
+            .catch(function () {
+              alert("Network error. Please try again.");
+            });
+        });
+      });
     </script>
   </body>
 </html>
