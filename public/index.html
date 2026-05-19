@@ -1124,20 +1124,17 @@
 
       function sendReport() {
         var email = document.getElementById("gateEmail").value;
-        if (!email) {
-          alert("Please enter your email address.");
-          return;
-        }
-        console.log("Email gate capture:", email);
-        if (typeof gtag !== "undefined") {
-          gtag("event", "report_requested", {
-            event_category: "calculator",
-            event_label: "send_report",
-          });
-        }
-        alert(
-          "Thanks! We'll send your full CBAM report to " + email + " shortly."
-        );
+        if (!email) { alert("Please enter your email address."); return; }
+        fetch("/api/capture", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: email, source: "calculator" })
+        })
+        .then(function(r) { return r.ok ? r.json() : r.json().then(function(d) { return Promise.reject(d); }); })
+        .then(function() {
+          document.querySelector(".email-gate").innerHTML = '<p style="color:#22c55e">Report sent! Check your inbox.</p>';
+        })
+        .catch(function(err) { alert("Error: " + (err.message || "Network error")); });
       }
 
       function toggleFaq(btn) {
