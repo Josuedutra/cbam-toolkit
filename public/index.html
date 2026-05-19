@@ -19,11 +19,34 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://cbam-toolkit.vercel.app" />
 
-    <!-- Google tag (gtag.js) — GA4 + Google Ads -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZYBJRVS4EP"></script>
+    <!-- Google Consent Mode v2 — must fire BEFORE gtag.js loads -->
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
+
+      // Default: deny all until user consents (GDPR/EEE compliant)
+      gtag('consent', 'default', {
+        'ad_storage': 'denied',
+        'ad_user_data': 'denied',
+        'ad_personalization': 'denied',
+        'analytics_storage': 'denied',
+        'wait_for_update': 500
+      });
+
+      // Check if user already consented in a previous visit
+      if (localStorage.getItem('cbam_consent') === 'granted') {
+        gtag('consent', 'update', {
+          'ad_storage': 'granted',
+          'ad_user_data': 'granted',
+          'ad_personalization': 'granted',
+          'analytics_storage': 'granted'
+        });
+      }
+    </script>
+
+    <!-- Google tag (gtag.js) — GA4 + Google Ads -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZYBJRVS4EP"></script>
+    <script>
       gtag('js', new Date());
       gtag('config', 'G-ZYBJRVS4EP');
       gtag('config', 'AW-18174252339');
@@ -1192,6 +1215,36 @@
             });
         });
       });
+    </script>
+    <!-- Cookie Consent Banner -->
+    <div id="cookie-banner" style="display:none; position:fixed; bottom:0; left:0; right:0; background:#061b31; color:#fff; padding:16px 24px; z-index:9999; font-size:14px; line-height:1.5; box-shadow:0 -2px 12px rgba(0,0,0,.15);">
+      <div style="max-width:960px; margin:0 auto; display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
+        <p style="margin:0; flex:1; min-width:240px;">We use cookies to measure site performance and improve your experience. By accepting, you consent to analytics and advertising cookies. <a href="https://cbamtoolkit.com/privacy" style="color:#60a5fa; text-decoration:underline;">Privacy Policy</a></p>
+        <div style="display:flex; gap:8px; flex-shrink:0;">
+          <button onclick="acceptCookies()" style="background:#2563eb; color:#fff; border:none; padding:8px 20px; border-radius:6px; cursor:pointer; font-size:14px; font-weight:600;">Accept</button>
+          <button onclick="rejectCookies()" style="background:transparent; color:#94a3b8; border:1px solid #334155; padding:8px 20px; border-radius:6px; cursor:pointer; font-size:14px;">Reject</button>
+        </div>
+      </div>
+    </div>
+    <script>
+      // Show banner only if user hasn't chosen yet
+      if (!localStorage.getItem('cbam_consent')) {
+        document.getElementById('cookie-banner').style.display = 'block';
+      }
+      function acceptCookies() {
+        localStorage.setItem('cbam_consent', 'granted');
+        gtag('consent', 'update', {
+          'ad_storage': 'granted',
+          'ad_user_data': 'granted',
+          'ad_personalization': 'granted',
+          'analytics_storage': 'granted'
+        });
+        document.getElementById('cookie-banner').style.display = 'none';
+      }
+      function rejectCookies() {
+        localStorage.setItem('cbam_consent', 'denied');
+        document.getElementById('cookie-banner').style.display = 'none';
+      }
     </script>
   </body>
 </html>
