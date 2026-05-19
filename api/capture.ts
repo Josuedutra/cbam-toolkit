@@ -1,5 +1,5 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { Resend } from 'resend';
+import type { VercelRequest, VercelResponse } from "@vercel/node";
+import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -21,72 +21,81 @@ function isRateLimited(ip: string): boolean {
 }
 
 const CATEGORY_LABELS: Record<string, string> = {
-  steel: 'Steel &amp; Iron products',
-  cement: 'Cement',
-  aluminum: 'Aluminum',
-  fertilizers: 'Fertilizers',
-  hydrogen: 'Hydrogen',
-  electricity: 'Electricity',
+  steel: "Steel &amp; Iron products",
+  cement: "Cement",
+  aluminum: "Aluminum",
+  fertilizers: "Fertilizers",
+  hydrogen: "Hydrogen",
+  electricity: "Electricity",
 };
 
 function escapeHtml(str: string): string {
   return str
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }
 
 function formatEuros(val: number): string {
   if (val >= 1_000_000) return `€${(val / 1_000_000).toFixed(2)}M`;
-  return `€${Math.round(val).toLocaleString('en-EU')}`;
+  return `€${Math.round(val).toLocaleString("en-EU")}`;
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // CORS: restrict to app domain; fallback to wildcard only in dev
-  const allowedOrigin = process.env.ALLOWED_ORIGIN || 'https://cbamtoolkit.com';
-  res.setHeader('Access-Control-Allow-Origin', allowedOrigin);
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  const allowedOrigin = process.env.ALLOWED_ORIGIN || "https://cbamtoolkit.com";
+  res.setHeader("Access-Control-Allow-Origin", allowedOrigin);
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
-  if (req.method === 'OPTIONS') {
+  if (req.method === "OPTIONS") {
     return res.status(200).end();
   }
 
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
   }
 
   const ip =
-    (req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim() ||
+    (req.headers["x-forwarded-for"] as string)?.split(",")[0]?.trim() ||
     req.socket?.remoteAddress ||
-    'unknown';
+    "unknown";
 
   if (isRateLimited(ip)) {
-    return res.status(429).json({ error: 'Too many requests. Please try again later.' });
+    return res
+      .status(429)
+      .json({ error: "Too many requests. Please try again later." });
   }
 
-  const { email, company, category, volume, country, obligation, totalEmissions } =
-    (req.body as Record<string, unknown>) || {};
+  const {
+    email,
+    company,
+    category,
+    volume,
+    country,
+    obligation,
+    totalEmissions,
+  } = (req.body as Record<string, unknown>) || {};
 
-  if (!email || typeof email !== 'string' || !email.includes('@')) {
-    return res.status(400).json({ error: 'Valid email required' });
+  if (!email || typeof email !== "string" || !email.includes("@")) {
+    return res.status(400).json({ error: "Valid email required" });
   }
 
-  const fromEmail = process.env.FROM_EMAIL || 'noreply@useritmo.pt';
+  const fromEmail = "reports@cbamtoolkit.com";
   const categoryLabel = escapeHtml(
-    CATEGORY_LABELS[category as string] || (category as string) || 'N/A',
+    CATEGORY_LABELS[category as string] || (category as string) || "N/A",
   );
-  const safeVolume = escapeHtml(String(volume || ''));
-  const safeCountry = escapeHtml(String(country || ''));
+  const safeVolume = escapeHtml(String(volume || ""));
+  const safeCountry = escapeHtml(String(country || ""));
   const obligationNum = Number(obligation) || 0;
   const emissionsNum = Number(totalEmissions) || 0;
 
   // Log the lead (visible in Vercel function logs)
-  console.log('CBAM lead captured:', {
+  console.log("CBAM lead captured:", {
     email,
-    company: company || 'N/A',
+    company: company || "N/A",
     category,
     volume,
     country,
@@ -101,7 +110,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     await resend.emails.send({
       from: `CBAM Toolkit <${fromEmail}>`,
       to: email as string,
-      subject: 'Your CBAM Obligation Report',
+      subject: "Your CBAM Obligation Report",
       html: `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -133,17 +142,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             <p style="margin:0 0 4px;font-size:12px;text-transform:uppercase;letter-spacing:0.04em;color:#71717a;">Estimated Annual Obligation</p>
             <p style="margin:0;font-size:32px;font-weight:700;letter-spacing:-0.03em;color:#479fff;">${formatEuros(obligationNum)}</p>
           </div>`
-          : ''
+          : ""
       }
 
       <!-- Breakdown table -->
       <div style="background:#1a1a1e;border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:20px 24px;margin-bottom:20px;">
         <p style="margin:0 0 16px;font-size:12px;font-weight:500;letter-spacing:0.04em;text-transform:uppercase;color:#71717a;">Calculation Details</p>
         <table style="width:100%;border-collapse:collapse;font-size:14px;">
-          ${category ? `<tr><td style="padding:8px 0;color:#71717a;border-bottom:1px solid rgba(255,255,255,0.06);">Product category</td><td style="padding:8px 0;text-align:right;font-weight:500;border-bottom:1px solid rgba(255,255,255,0.06);">${categoryLabel}</td></tr>` : ''}
-          ${safeVolume ? `<tr><td style="padding:8px 0;color:#71717a;border-bottom:1px solid rgba(255,255,255,0.06);">Annual import volume</td><td style="padding:8px 0;text-align:right;font-weight:500;border-bottom:1px solid rgba(255,255,255,0.06);">${safeVolume} tonnes</td></tr>` : ''}
-          ${safeCountry ? `<tr><td style="padding:8px 0;color:#71717a;border-bottom:1px solid rgba(255,255,255,0.06);">Country of origin</td><td style="padding:8px 0;text-align:right;font-weight:500;border-bottom:1px solid rgba(255,255,255,0.06);">${safeCountry}</td></tr>` : ''}
-          ${emissionsNum > 0 ? `<tr><td style="padding:8px 0;color:#71717a;">Total embedded emissions</td><td style="padding:8px 0;text-align:right;font-weight:500;">${emissionsNum.toFixed(1)} tCO₂</td></tr>` : ''}
+          ${category ? `<tr><td style="padding:8px 0;color:#71717a;border-bottom:1px solid rgba(255,255,255,0.06);">Product category</td><td style="padding:8px 0;text-align:right;font-weight:500;border-bottom:1px solid rgba(255,255,255,0.06);">${categoryLabel}</td></tr>` : ""}
+          ${safeVolume ? `<tr><td style="padding:8px 0;color:#71717a;border-bottom:1px solid rgba(255,255,255,0.06);">Annual import volume</td><td style="padding:8px 0;text-align:right;font-weight:500;border-bottom:1px solid rgba(255,255,255,0.06);">${safeVolume} tonnes</td></tr>` : ""}
+          ${safeCountry ? `<tr><td style="padding:8px 0;color:#71717a;border-bottom:1px solid rgba(255,255,255,0.06);">Country of origin</td><td style="padding:8px 0;text-align:right;font-weight:500;border-bottom:1px solid rgba(255,255,255,0.06);">${safeCountry}</td></tr>` : ""}
+          ${emissionsNum > 0 ? `<tr><td style="padding:8px 0;color:#71717a;">Total embedded emissions</td><td style="padding:8px 0;text-align:right;font-weight:500;">${emissionsNum.toFixed(1)} tCO₂</td></tr>` : ""}
         </table>
       </div>
 
@@ -184,7 +193,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     return res.status(200).json({ success: true });
   } catch (err) {
-    console.error('Resend email failed:', err);
-    return res.status(500).json({ error: 'Failed to send email. Please try again.' });
+    console.error("Resend email failed:", err);
+    return res
+      .status(500)
+      .json({ error: "Failed to send email. Please try again." });
   }
 }
