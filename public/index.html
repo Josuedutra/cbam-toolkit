@@ -30,10 +30,10 @@
         --meta: var(--muted);
         --border: #e5edf5;
         --border-soft: var(--border);
-        --accent: #533afd;
+        --accent: #2563eb;
         --accent-on: #ffffff;
-        --accent-hover: #4434d4;
-        --accent-active: #2e2b8c;
+        --accent-hover: #1d4ed8;
+        --accent-active: #1e40af;
         --success: #15be53;
         --warn: #9b6829;
         --danger: #ea2261;
@@ -329,23 +329,280 @@
         font-size: var(--text-xs);
         color: var(--fg-2);
       }
-      .pricing {
+      /* Calculator styles */
+      .calc-form {
         display: grid;
-        grid-template-columns: 1fr 0.75fr;
-        gap: var(--space-8);
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-5);
+        margin-top: var(--space-8);
+      }
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-2);
+      }
+      .field label {
+        font-size: var(--text-sm);
+        color: var(--fg-2);
+        font-weight: 400;
+      }
+      .field input,
+      .field select {
+        min-height: 44px;
+        padding: 10px 12px;
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--border);
+        background: var(--surface);
+        color: var(--fg);
+        font: 300 var(--text-base)/1.4 var(--font-body);
+        outline: none;
+      }
+      .field input::placeholder {
+        color: var(--muted);
+      }
+      .field input:focus-visible,
+      .field select:focus-visible {
+        outline: none;
+        box-shadow: var(--focus-ring);
+      }
+      .calc-actions {
+        grid-column: 1 / -1;
+        display: flex;
+        gap: var(--space-3);
         align-items: center;
+        margin-top: var(--space-3);
       }
-      .price-card {
-        padding: var(--space-8);
+      .calc-results {
+        margin-top: var(--space-8);
+        display: none;
       }
-      .price {
-        font-size: var(--text-4xl);
-        letter-spacing: -0.025em;
+      .calc-results.visible {
+        display: block;
+      }
+      .result-tiles {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--space-5);
+        margin-bottom: var(--space-6);
+      }
+      .result-tile {
+        padding: var(--space-6);
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        text-align: center;
+      }
+      .result-tile .tile-value {
+        font-size: var(--text-2xl);
+        font-weight: 400;
+        letter-spacing: -0.02em;
+        color: var(--accent);
         font-feature-settings: "tnum", "ss01";
       }
-      .price small {
+      .result-tile .tile-label {
+        font-size: var(--text-sm);
+        color: var(--muted);
+        margin-top: var(--space-2);
+      }
+      .disclaimer-box {
+        padding: var(--space-5);
+        background: var(--surface-warm);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        font-size: var(--text-sm);
+        color: var(--muted);
+        margin-bottom: var(--space-6);
+      }
+      .email-gate {
+        display: flex;
+        gap: var(--space-3);
+        flex-wrap: wrap;
+        align-items: center;
+      }
+      .email-gate input {
+        min-width: min(100%, 280px);
+        min-height: 44px;
+        padding: 10px 12px;
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--border);
+        background: var(--surface);
+        color: var(--fg);
+        font: 300 var(--text-base)/1.4 var(--font-body);
+        outline: none;
+      }
+      .email-gate input::placeholder {
+        color: var(--muted);
+      }
+      .email-gate input:focus-visible {
+        outline: none;
+        box-shadow: var(--focus-ring);
+      }
+      /* Pricing tiers */
+      .pricing-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--space-5);
+        align-items: start;
+      }
+      .tier-card {
+        padding: var(--space-8);
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-5);
+      }
+      .tier-card.featured {
+        border-color: var(--accent);
+        border-width: 2px;
+        position: relative;
+      }
+      .tier-card.dimmed {
+        opacity: 0.65;
+      }
+      .tier-name {
+        font-size: var(--text-sm);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--muted);
+        font-weight: 400;
+      }
+      .tier-pill {
+        display: inline-block;
+        padding: 2px 10px;
+        border-radius: var(--radius-pill);
+        font-size: var(--text-xs);
+        font-weight: 400;
+        background: color-mix(in oklab, var(--accent), transparent 85%);
+        color: var(--accent);
+        border: 1px solid color-mix(in oklab, var(--accent), transparent 65%);
+      }
+      .tier-chip {
+        display: inline-block;
+        padding: 2px 10px;
+        border-radius: var(--radius-pill);
+        font-size: var(--text-xs);
+        font-weight: 400;
+        background: color-mix(in oklab, var(--muted), transparent 85%);
+        color: var(--muted);
+        border: 1px solid var(--border);
+      }
+      .tier-price {
+        font-size: var(--text-2xl);
+        font-weight: 300;
+        letter-spacing: -0.02em;
+        font-feature-settings: "tnum", "ss01";
+        color: var(--fg);
+      }
+      .tier-price small {
         font-size: var(--text-base);
         color: var(--muted);
+      }
+      .tier-save {
+        font-size: var(--text-sm);
+        color: var(--muted);
+        margin-top: var(--space-1);
+      }
+      .tier-features {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-3);
+        font-size: var(--text-sm);
+        color: var(--fg-2);
+        flex: 1;
+      }
+      .tier-features li {
+        display: flex;
+        gap: var(--space-2);
+        align-items: flex-start;
+      }
+      .feat-yes {
+        color: var(--success);
+        font-size: var(--text-base);
+        line-height: 1.2;
+        flex-shrink: 0;
+      }
+      .feat-no {
+        color: var(--muted);
+        font-size: var(--text-base);
+        line-height: 1.2;
+        flex-shrink: 0;
+      }
+      .btn-outline {
+        background: transparent;
+        color: var(--fg);
+        border: 1px solid var(--border);
+      }
+      .btn-outline:hover {
+        background: var(--surface-warm);
+      }
+      /* FAQ styles */
+      .faq-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        overflow: hidden;
+      }
+      .faq-item {
+        border-bottom: 1px solid var(--border);
+      }
+      .faq-item:last-child {
+        border-bottom: none;
+      }
+      .faq-question {
+        width: 100%;
+        background: var(--surface);
+        color: var(--fg);
+        border: none;
+        padding: var(--space-6);
+        font: 400 var(--text-base)/var(--leading-body) var(--font-body);
+        font-feature-settings: "ss01";
+        text-align: left;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: var(--space-4);
+        transition: background var(--motion-fast) var(--ease-standard);
+      }
+      .faq-question:hover {
+        background: var(--surface-warm);
+      }
+      .faq-icon {
+        font-size: var(--text-xl);
+        line-height: 1;
+        color: var(--muted);
+        flex-shrink: 0;
+        transition: transform var(--motion-base) var(--ease-standard);
+      }
+      .faq-item.open .faq-icon {
+        transform: rotate(45deg);
+      }
+      .faq-answer {
+        display: none;
+        padding: 0 var(--space-6) var(--space-6);
+        color: var(--muted);
+        font-size: var(--text-base);
+        line-height: var(--leading-body);
+        background: var(--surface);
+      }
+      .faq-item.open .faq-answer {
+        display: block;
+      }
+      @media (max-width: 900px) {
+        .pricing-grid,
+        .result-tiles {
+          grid-template-columns: 1fr;
+        }
+        .calc-form {
+          grid-template-columns: 1fr;
+        }
       }
       footer {
         padding: var(--space-12) 0;
@@ -400,6 +657,7 @@
         <div class="nav-links">
           <a href="#cbam">CBAM</a>
           <a href="#features">Features</a>
+          <a href="#calculator">Calculator</a>
           <a href="#pricing">Pricing</a>
           <a class="btn btn-primary" href="mailto:hello@cbamtoolkit.com"
             >Early access</a
@@ -513,36 +771,306 @@
         </div>
       </section>
 
-      <section class="light" id="pricing">
-        <div class="container pricing">
-          <div>
-            <span class="eyebrow">Simple pricing</span>
-            <h2>
-              Start CBAM readiness for less than a compliance spreadsheet
-              contractor hour.
-            </h2>
-            <p
-              class="lede"
-              style="margin-top: var(--space-4); color: var(--muted)"
-            >
-              Early access includes automated calculations, report preparation,
-              supplier tracking, and product updates as CBAM obligations evolve.
+      <section class="light" id="calculator">
+        <div class="container">
+          <div class="section-head">
+            <span class="eyebrow">Free CBAM calculator</span>
+            <h2>Estimate your 2026 CBAM obligation in 2 minutes</h2>
+            <p>
+              Enter your import details. Get an instant breakdown of certificates
+              needed and estimated cost.
             </p>
           </div>
-          <aside class="panel price-card">
-            <div class="price">€29<small>/month</small></div>
-            <p
-              style="
-                color: var(--muted);
-                margin: var(--space-4) 0 var(--space-6);
-              "
-            >
-              For European importers preparing recurring CBAM reports.
+
+          <form class="calc-form" id="calcForm" onsubmit="return false;">
+            <div class="field">
+              <label for="calcProduct">Product category</label>
+              <select id="calcProduct" required>
+                <option value="">Select product…</option>
+                <option value="steel">Steel</option>
+                <option value="cement">Cement</option>
+                <option value="aluminium">Aluminium</option>
+                <option value="fertilizers">Fertilizers</option>
+                <option value="hydrogen">Hydrogen</option>
+                <option value="electricity">Electricity</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="calcVolume">Annual import volume (tonnes)</label>
+              <input
+                type="number"
+                id="calcVolume"
+                min="0"
+                step="any"
+                placeholder="e.g. 500"
+                required
+              />
+            </div>
+
+            <div class="field">
+              <label for="calcOrigin">Country of origin</label>
+              <select id="calcOrigin" required>
+                <option value="">Select country…</option>
+                <option value="China">China</option>
+                <option value="India">India</option>
+                <option value="Turkey">Turkey</option>
+                <option value="Russia">Russia</option>
+                <option value="Ukraine">Ukraine</option>
+                <option value="Brazil">Brazil</option>
+                <option value="South Africa">South Africa</option>
+                <option value="Egypt">Egypt</option>
+                <option value="Vietnam">Vietnam</option>
+                <option value="Indonesia">Indonesia</option>
+                <option value="South Korea">South Korea</option>
+                <option value="Taiwan">Taiwan</option>
+                <option value="Thailand">Thailand</option>
+                <option value="Malaysia">Malaysia</option>
+                <option value="Morocco">Morocco</option>
+                <option value="Tunisia">Tunisia</option>
+                <option value="Serbia">Serbia</option>
+                <option value="Bosnia">Bosnia</option>
+                <option value="North Macedonia">North Macedonia</option>
+                <option value="Other non-EU">Other non-EU</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="calcCarbon"
+                >Carbon price paid in origin (EUR/tCO₂, optional)</label
+              >
+              <input
+                type="number"
+                id="calcCarbon"
+                min="0"
+                step="any"
+                placeholder="0"
+              />
+            </div>
+
+            <div class="calc-actions">
+              <button
+                class="btn btn-primary"
+                type="button"
+                onclick="runCalculation()"
+              >
+                Calculate my CBAM obligation
+              </button>
+            </div>
+          </form>
+
+          <div class="calc-results" id="calcResults">
+            <div class="result-tiles">
+              <div class="result-tile">
+                <div class="tile-value" id="resultObligation">—</div>
+                <div class="tile-label">Estimated annual CBAM obligation (EUR)</div>
+              </div>
+              <div class="result-tile">
+                <div class="tile-value" id="resultCerts">—</div>
+                <div class="tile-label">CBAM certificates required (tCO₂)</div>
+              </div>
+              <div class="result-tile">
+                <div class="tile-value" id="resultETS">—</div>
+                <div class="tile-label">EU ETS carbon price used (EUR/tCO₂)</div>
+              </div>
+            </div>
+
+            <div class="disclaimer-box">
+              Estimate only — not a legal declaration. Figures are based on the
+              EU Commission methodology using the default emission factors from
+              Annex IV and the current EU ETS carbon price. Actual CBAM
+              obligations depend on supplier-specific embedded emissions,
+              verified declarations, and quarterly ETS price averages.
+            </div>
+
+            <div class="email-gate">
+              <input
+                type="email"
+                id="gateEmail"
+                placeholder="work@email.com"
+                aria-label="Work email"
+              />
+              <button class="btn btn-primary" type="button" onclick="sendReport()">
+                Send me the full report
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="light" id="pricing">
+        <div class="container">
+          <div class="section-head">
+            <span class="eyebrow">Simple pricing</span>
+            <h2>Start CBAM readiness in minutes.</h2>
+            <p>
+              From a free first calculation to full compliance automation.
+              Cancel anytime.
             </p>
-            <a class="btn btn-primary" href="mailto:hello@cbamtoolkit.com"
-              >Request early access</a
-            >
-          </aside>
+          </div>
+
+          <div class="pricing-grid">
+            <!-- Free tier -->
+            <div class="tier-card">
+              <div>
+                <div class="tier-name">Free</div>
+                <div class="tier-price" style="margin-top: var(--space-3);">
+                  €0<small>/mo</small>
+                </div>
+                <div class="tier-save">No credit card required</div>
+              </div>
+              <ul class="tier-features">
+                <li><span class="feat-yes">✓</span> 1 calculation per month</li>
+                <li><span class="feat-yes">✓</span> Basic estimate with CN codes</li>
+                <li><span class="feat-yes">✓</span> Email report (PDF)</li>
+                <li><span class="feat-no">✕</span> <span style="color:var(--muted);">Full Annex IV declaration</span></li>
+                <li><span class="feat-no">✕</span> <span style="color:var(--muted);">Certificate tracker</span></li>
+                <li><span class="feat-no">✕</span> <span style="color:var(--muted);">Unlimited calculations</span></li>
+              </ul>
+              <a
+                class="btn btn-outline"
+                href="#calculator"
+                style="width: 100%; text-align: center;"
+                >Start free</a
+              >
+            </div>
+
+            <!-- Single Importer (featured) -->
+            <div class="tier-card featured">
+              <div>
+                <div
+                  style="display: flex; align-items: center; justify-content: space-between; gap: var(--space-3);"
+                >
+                  <div class="tier-name">Single Importer</div>
+                  <span class="tier-pill">Most popular</span>
+                </div>
+                <div class="tier-price" style="margin-top: var(--space-3);">
+                  €29<small>/mo annual</small>
+                </div>
+                <div class="tier-save">€39 monthly · Save 26% annually</div>
+              </div>
+              <ul class="tier-features">
+                <li><span class="feat-yes">✓</span> Unlimited calculations</li>
+                <li><span class="feat-yes">✓</span> Annex IV declaration</li>
+                <li><span class="feat-yes">✓</span> Certificate tracker</li>
+                <li><span class="feat-yes">✓</span> EU ETS price updates</li>
+                <li><span class="feat-yes">✓</span> Email support</li>
+                <li><span class="feat-yes">✓</span> Full EU methodology</li>
+              </ul>
+              <a
+                class="btn btn-primary"
+                href="mailto:hello@cbamtoolkit.com"
+                style="width: 100%; text-align: center;"
+                >Request early access</a
+              >
+            </div>
+
+            <!-- Broker Plan (coming soon) -->
+            <div class="tier-card dimmed">
+              <div>
+                <div
+                  style="display: flex; align-items: center; justify-content: space-between; gap: var(--space-3);"
+                >
+                  <div class="tier-name">Broker Plan</div>
+                  <span class="tier-chip">Coming Soon</span>
+                </div>
+                <div class="tier-price" style="margin-top: var(--space-3);">
+                  Multi-client<small> pricing</small>
+                </div>
+                <div class="tier-save">&nbsp;</div>
+              </div>
+              <ul class="tier-features">
+                <li><span class="feat-yes">✓</span> Everything in Single Importer</li>
+                <li><span class="feat-yes">✓</span> Multi-client dashboard</li>
+                <li><span class="feat-yes">✓</span> Bulk calculations</li>
+                <li><span class="feat-yes">✓</span> White-label documentation</li>
+                <li><span class="feat-yes">✓</span> Priority support</li>
+                <li><span class="feat-yes">✓</span> Client billing tools</li>
+              </ul>
+              <a
+                class="btn btn-outline"
+                href="mailto:hello@cbamtoolkit.com?subject=Broker%20Plan%20Waitlist"
+                style="width: 100%; text-align: center;"
+                >Join the waitlist</a
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="light" id="faq">
+        <div class="container">
+          <div class="section-head">
+            <span class="eyebrow">Questions</span>
+            <h2>Frequently asked</h2>
+          </div>
+          <div class="faq-list">
+            <div class="faq-item">
+              <button class="faq-question" onclick="toggleFaq(this)">
+                <span>I import less than 50 tonnes — do I need this?</span>
+                <span class="faq-icon">+</span>
+              </button>
+              <div class="faq-answer">
+                CBAM includes a 50-tonne annual threshold per importer. If your
+                total CBAM-scope imports across all regulated goods (steel,
+                cement, aluminium, fertilizers, hydrogen, electricity) are below
+                50 tonnes per year, you are currently exempt from the
+                transitional reporting obligation. However, this threshold
+                applies to the total, not per product — and it may be revised
+                as CBAM moves from the transitional to the definitive phase in
+                2026. We recommend tracking your volumes now to avoid
+                last-minute compliance gaps.
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <button class="faq-question" onclick="toggleFaq(this)">
+                <span>Which goods are in scope?</span>
+                <span class="faq-icon">+</span>
+              </button>
+              <div class="faq-answer">
+                The six product categories currently in scope under Regulation
+                (EU) 2023/956 are: Steel (iron and steel), Cement, Aluminium,
+                Fertilizers, Hydrogen, and Electricity. These cover specific CN
+                codes listed in Annex I of the regulation. Products outside
+                these categories — such as plastics, glass, or paper — are not
+                subject to CBAM at this stage, though the European Commission
+                has signalled potential expansion beyond 2030.
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <button class="faq-question" onclick="toggleFaq(this)">
+                <span>Is this an official EU tool?</span>
+                <span class="faq-icon">+</span>
+              </button>
+              <div class="faq-answer">
+                No. CBAM Toolkit is an independent SaaS product and is not
+                affiliated with, endorsed by, or operated by the European
+                Commission, TAXUD, or any EU institution. The official CBAM
+                transitional registry is managed by the European Commission.
+                Our tool is designed to help importers prepare and organise
+                their data before submitting reports through official channels.
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <button class="faq-question" onclick="toggleFaq(this)">
+                <span>How accurate is the calculation?</span>
+                <span class="faq-icon">+</span>
+              </button>
+              <div class="faq-answer">
+                Our calculator uses the default emission factors published by
+                the European Commission in Annex IV of the CBAM Implementing
+                Regulation, combined with live EU ETS carbon price data. For
+                the definitive phase, importers must use actual embedded
+                emissions verified by an accredited verifier — our default
+                factors are a conservative proxy for planning purposes. If your
+                supplier has a verified specific emission value, you can use the
+                carbon-price-paid field to adjust the net obligation downward.
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </main>
@@ -553,5 +1081,77 @@
         <a href="mailto:hello@cbamtoolkit.com">hello@cbamtoolkit.com</a>
       </div>
     </footer>
+    <script>
+      // Emission factors (tCO₂/tonne) — EU Commission Annex IV defaults
+      var EMISSION_FACTORS = {
+        steel: 1.89,
+        cement: 0.64,
+        aluminium: 6.71,
+        fertilizers: 2.56,
+        hydrogen: 9.33,
+        electricity: 0.42,
+      };
+      var ETS_PRICE = 62.4;
+
+      function runCalculation() {
+        var product = document.getElementById("calcProduct").value;
+        var volume = parseFloat(document.getElementById("calcVolume").value);
+        var carbonPaid =
+          parseFloat(document.getElementById("calcCarbon").value) || 0;
+
+        if (!product || isNaN(volume) || volume <= 0) {
+          alert("Please fill in product category and import volume.");
+          return;
+        }
+
+        var emissionFactor = EMISSION_FACTORS[product];
+        var certificates = emissionFactor * volume;
+        var netCarbonPrice = Math.max(0, ETS_PRICE - carbonPaid);
+        var obligation = certificates * netCarbonPrice;
+
+        document.getElementById("resultObligation").textContent =
+          "€" + obligation.toLocaleString("en-EU", { maximumFractionDigits: 2 });
+        document.getElementById("resultCerts").textContent =
+          certificates.toLocaleString("en-EU", { maximumFractionDigits: 2 }) +
+          " tCO₂";
+        document.getElementById("resultETS").textContent =
+          "€" + ETS_PRICE.toFixed(2);
+
+        var resultsEl = document.getElementById("calcResults");
+        resultsEl.classList.add("visible");
+        resultsEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
+
+      function sendReport() {
+        var email = document.getElementById("gateEmail").value;
+        if (!email) {
+          alert("Please enter your email address.");
+          return;
+        }
+        console.log("Email gate capture:", email);
+        if (typeof gtag !== "undefined") {
+          gtag("event", "report_requested", {
+            event_category: "calculator",
+            event_label: "send_report",
+          });
+        }
+        alert(
+          "Thanks! We'll send your full CBAM report to " + email + " shortly."
+        );
+      }
+
+      function toggleFaq(btn) {
+        var item = btn.closest(".faq-item");
+        var isOpen = item.classList.contains("open");
+        // Close all
+        document.querySelectorAll(".faq-item.open").forEach(function (el) {
+          el.classList.remove("open");
+        });
+        // Open clicked if it was closed
+        if (!isOpen) {
+          item.classList.add("open");
+        }
+      }
+    </script>
   </body>
 </html>
