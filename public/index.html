@@ -23,8 +23,14 @@
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="CBAM Toolkit" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="CBAM Toolkit — Carbon Border Adjustment Calculator" />
-    <meta name="twitter:description" content="Free calculator to estimate your CBAM obligations. Know your costs before EU enforcement begins." />
+    <meta
+      name="twitter:title"
+      content="CBAM Toolkit — Carbon Border Adjustment Calculator"
+    />
+    <meta
+      name="twitter:description"
+      content="Free calculator to estimate your CBAM obligations. Know your costs before EU enforcement begins."
+    />
     <meta name="twitter:image" content="https://cbamtoolkit.com/og-image.png" />
 
     <!-- Google Consent Mode v2 — must fire BEFORE gtag.js loads -->
@@ -926,8 +932,9 @@
 
             <div class="disclaimer-box">
               Estimate only — not a legal declaration. Figures are based on the
-              EU Commission methodology using the default emission factors from
-              Annex IV and the current EU ETS carbon price. Actual CBAM
+              EU Commission benchmarks from Implementing Regulations (EU)
+              2025/2620 and 2025/2621 (definitive phase, effective 1 Jan 2026),
+              combined with the current EU ETS carbon price. Actual CBAM
               obligations depend on supplier-specific embedded emissions,
               verified declarations, and quarterly ETS price averages.
             </div>
@@ -1097,11 +1104,10 @@
                 total CBAM-scope imports across all regulated goods (steel,
                 cement, aluminium, fertilizers, hydrogen, electricity) are below
                 50 tonnes per year, you are currently exempt from the
-                transitional reporting obligation. However, this threshold
-                applies to the total, not per product — and it may be revised as
-                CBAM moves from the transitional to the definitive phase in
-                2026. We recommend tracking your volumes now to avoid
-                last-minute compliance gaps.
+                obligation. However, this threshold applies to the total, not
+                per product — and it may be revised. CBAM entered the definitive
+                phase on 1 January 2026. We recommend tracking your volumes now
+                to avoid last-minute compliance gaps.
               </div>
             </div>
 
@@ -1130,9 +1136,9 @@
                 No. CBAM Toolkit is an independent SaaS product and is not
                 affiliated with, endorsed by, or operated by the European
                 Commission, TAXUD, or any EU institution. The official CBAM
-                transitional registry is managed by the European Commission. Our
-                tool is designed to help importers prepare and organise their
-                data before submitting reports through official channels.
+                registry is managed by the European Commission. Our tool is
+                designed to help importers prepare and organise their data
+                before submitting reports through official channels.
               </div>
             </div>
 
@@ -1142,14 +1148,15 @@
                 <span class="faq-icon">+</span>
               </button>
               <div class="faq-answer">
-                Our calculator uses the default emission factors published by
-                the European Commission in Annex IV of the CBAM Implementing
-                Regulation, combined with live EU ETS carbon price data. For the
-                definitive phase, importers must use actual embedded emissions
-                verified by an accredited verifier — our default factors are a
-                conservative proxy for planning purposes. If your supplier has a
-                verified specific emission value, you can use the
-                carbon-price-paid field to adjust the net obligation downward.
+                Our calculator uses the definitive-phase benchmarks published by
+                the European Commission in Implementing Regulations (EU)
+                2025/2620 and 2025/2621 (effective 1 January 2026), combined
+                with the current EU ETS carbon price. Importers must use actual
+                embedded emissions verified by an accredited verifier — our
+                benchmark factors are a conservative proxy for planning
+                purposes. If your supplier has a verified specific emission
+                value, you can use the carbon-price-paid field to adjust the net
+                obligation downward.
               </div>
             </div>
           </div>
@@ -1164,16 +1171,23 @@
       </div>
     </footer>
     <script>
-      // Emission factors (tCO₂/tonne) — EU Commission Annex IV defaults
+      // Emission factors (tCO₂/tonne) — EC Implementing Regulations (EU) 2025/2620 & 2025/2621
+      // Definitive phase benchmarks effective 1 January 2026.
+      // Steel: BF/BOF route benchmark. Cement: Portland. Aluminium: primary smelting.
+      // Fertilizers: anhydrous ammonia benchmark (representative N-fertilizer precursor).
+      // Hydrogen: BMg benchmark (EU best-performer reference).
+      // Electricity: tCO₂/MWh — country-specific per Annex III IR 2025/2621; EU-average proxy retained.
       var EMISSION_FACTORS = {
-        steel: 1.89,
-        cement: 0.64,
-        aluminium: 6.71,
-        fertilizers: 2.56,
-        hydrogen: 9.33,
+        steel: 1.37,
+        cement: 1.584,
+        aluminium: 1.464,
+        fertilizers: 1.522,
+        hydrogen: 5.089,
         electricity: 0.42,
       };
-      var ETS_PRICE = 62.4;
+      // EU ETS carbon price (EUR/tCO₂). ICE December-2026 EUA contract average, May 2026.
+      // Update monthly: https://www.theice.com/products/197/EUA-Futures
+      var ETS_PRICE = 74.77;
 
       function runCalculation() {
         var product = document.getElementById("calcProduct").value;
